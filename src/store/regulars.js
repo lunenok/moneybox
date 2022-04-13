@@ -1,7 +1,6 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from 'mobx';
 
-export const subsStore = makeAutoObservable({
-  subs: [
+const regularMock = [
     {
         id: 1,
         description: 'netflix',
@@ -19,12 +18,21 @@ export const subsStore = makeAutoObservable({
         description: 'internet',
         amount: 550,
         currency: 'rub'
+    },
+    {
+        id: 4,
+        description: 'rental',
+        amount: 15000,
+        currency: 'rub'
     }
-  ],
+];
+
+export const subsStore = makeAutoObservable({
+  subs: regularMock,
 
   save: (subs) => {
     subsStore.subs = subs
   },
 });
 
-window.subsStore = subsStore
+window.subsStore = subsStore;

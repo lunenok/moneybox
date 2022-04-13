@@ -1,7 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Container, Box, Tab, Tabs} from '@mui/material';
-import Subs from './subs';
+import Regulars from './regulars';
+import Outcomes from './outcomes';
+import Incomes from './incomes';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -41,19 +43,19 @@ export default function BasicTabs() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Подписки" />
-              <Tab label="Запланированные траты" />
-              <Tab label="Доходы" />
+              <Tab label="Regular" />
+              <Tab label="Outcome" />
+              <Tab label="Income" />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <Subs/>
+            <Regulars/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            <Outcomes/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Item Three
+            <Incomes/>
           </TabPanel>
         </Box>
     </Container>

@@ -9,8 +9,8 @@ function Header() {
                     <Typography variant='h6' component='span' sx={{mr: 'auto'}}>
                         MoneyBox
                     </Typography>
-                    <Button sx={{ my: 2, color: 'white', display: 'block' }}>Ввод данных</Button>
-                    <Button sx={{ my: 2, color: 'white', display: 'block', ml: 4 }}>Расчет</Button>
+                    <Button sx={{ my: 2, color: 'white', display: 'block' }}>Enter data</Button>
+                    <Button sx={{ my: 2, color: 'white', display: 'block', ml: 4 }}>Calculation</Button>
                 </Toolbar>
             </Container>
         </AppBar>
