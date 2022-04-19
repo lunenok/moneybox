@@ -28,11 +28,20 @@ const regularMock = [
 ];
 
 export const subsStore = makeAutoObservable({
-  subs: regularMock,
+    subs: regularMock,
 
-  save: (subs) => {
-    subsStore.subs = subs
-  },
+    save: (subs) => {
+        subsStore.subs = subs
+    },
+
+    getByMonth: () => {
+        let monthPayments = 0;
+        subsStore.subs.forEach((sub) => {
+            monthPayments = parseInt(monthPayments) + parseInt(sub.amount);
+        });
+        return monthPayments;
+    }
+  
 });
 
 window.subsStore = subsStore;

@@ -18,7 +18,7 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-function Subs() {
+function Payments() {
     const subs = subsStore.subs.map((sub) => ({
         id: sub.id,
         description: sub.description,
@@ -29,7 +29,7 @@ function Subs() {
     const [isSaved, setStatus] = useState(true);
 
     useEffect(() => {
-        return () => {console.log(isSaved)}
+        // Позже
     });
     
     const onAdd = (pushCallback) => {
@@ -150,4 +150,4 @@ function Subs() {
     )
 }
 
-export default observer(Subs)
+export default observer(Payments)

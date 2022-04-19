@@ -22,7 +22,16 @@ export const outcomesStore = makeAutoObservable({
 
     save: (outcomes) => {
         outcomesStore.outcomes = outcomes
+    },
+
+    getByMonth: () => {
+        const incomesByMonts = outcomesStore.outcomes.reduce(
+            (prev, cur) => ((prev[cur.month] = (parseInt(prev[cur.month]) || 0) + parseInt(cur.amount)), prev),
+            {}
+        );
+        return incomesByMonts
     }
+
 });
 
 window.outcomesStore = outcomesStore;

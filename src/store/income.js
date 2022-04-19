@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { addSumToEveryMonth } from './../utils';
 
 const incomeMock = {
     balance: 30000,
@@ -17,7 +18,16 @@ const incomeMock = {
 
 export const incomesStore = makeAutoObservable({
     incomes: incomeMock,
+
     save: (incomes) => {
         incomesStore.incomes = incomes
+    },
+
+    getByMonth: () => {
+        const incomesByMonts = incomesStore.incomes.anotherIncomes.reduce(
+            (prev, cur) => ((prev[cur.month] = (parseInt(prev[cur.month]) || 0) + parseInt(cur.amount)), prev),
+            {}
+        );
+        return addSumToEveryMonth(incomesByMonts, incomesStore.incomes.salary);
     }
 });

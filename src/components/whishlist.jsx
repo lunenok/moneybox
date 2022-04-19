@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import {outcomesStore} from './../store/outcomes'
-import {observer} from 'mobx-react-lite'
+import React, { useState } from 'react';
+import {whishlistStore} from './../store/whislist';
+import {observer} from 'mobx-react-lite';
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 
 const schema = Yup.object().shape({
-    outcomes: Yup.array()
+    whishlist: Yup.array()
         .of(
             Yup.object().shape({
                 id: Yup.number().required('Required'),
@@ -19,35 +19,35 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-function Subs() {
-    const outcomes = outcomesStore.outcomes.map((oc) => ({
+function Whishlist() {
+    const whishlist = whishlistStore.whishlist.map((oc) => ({
         id: oc.id,
         description: oc.description,
         amount: oc.amount,
         currency: oc.currency,
         month: oc.month}))
-    const initialValues = {outcomes}
-    const [count, setCount] = useState(outcomes.length);
+    const initialValues = {whishlist}
+    const [count, setCount] = useState(whishlist.length);
     
     const onAdd = (pushCallback) => {
-        const newSub = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
-        pushCallback(newSub)
+        const newItem = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
+        pushCallback(newItem)
         setCount(count + 1)
     };
     
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues} onSubmit={(values)=>{outcomesStore.save(values.outcomes)}} validationSchema={schema}> 
+            <Formik initialValues={initialValues} onSubmit={(values)=>{whishlistStore.save(values.whishlist)}} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'}>Outcomes</Typography>
-                            <Typography variant={'body'} mb={2}>Enter your non-regular outcomes</Typography>
+                            <Typography variant={'h6'} mt={3}>Whislist</Typography>
+                            <Typography variant={'body'} mb={2}>Enter your whishes</Typography>
                         </Grid>
-                        <FieldArray name='outcomes'>
+                        <FieldArray name='whishlist'>
                             {({insert, remove, push}) => (
                                 <div>
-                                    {values.outcomes.map((outcome, index) => {
+                                    {values.whishlist.map((whish, index) => {
 
                                         return (
                                             <div className='row' key={index}>
@@ -55,8 +55,8 @@ function Subs() {
                                                     <Grid item xs={1}></Grid>
                                                     <Grid item xs={0.5}>
                                                         <TextField 
-                                                            name={`outcomes.${index}.id`}
-                                                            value={outcome.id} 
+                                                            name={`whishlist.${index}.id`}
+                                                            value={whish.id} 
                                                             onChange={handleChange} 
                                                             onBlur={handleBlur} 
                                                             label="#"
@@ -64,31 +64,31 @@ function Subs() {
                                                     </Grid>
                                                     <Grid item>
                                                         <TextField 
-                                                            name={`outcomes.${index}.description`} 
-                                                            value={outcome.description} 
+                                                            name={`whishlist.${index}.description`} 
+                                                            value={whish.description} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
-                                                            helperText={showErrorMessageFormik(touched, errors, `outcomes.${index}.description`)}
-                                                            error={isErrorFormik(touched, errors, `outcomes.${index}.description`)}
+                                                            helperText={showErrorMessageFormik(touched, errors, `whishlist.${index}.description`)}
+                                                            error={isErrorFormik(touched, errors, `whishlist.${index}.description`)}
                                                             label="name"/>
                                                     </Grid>
                                                     <Grid item xs={1.5}>
                                                         <TextField 
-                                                            name={`outcomes.${index}.amount`} 
-                                                            value={outcome.amount} 
+                                                            name={`whishlist.${index}.amount`} 
+                                                            value={whish.amount} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
                                                             label="amount"
-                                                            helperText={showErrorMessageFormik(touched, errors, `outcomes.${index}.amount`)}
-                                                            error={isErrorFormik(touched, errors, `outcomes.${index}.amount`)}
+                                                            helperText={showErrorMessageFormik(touched, errors, `whishlist.${index}.amount`)}
+                                                            error={isErrorFormik(touched, errors, `whishlist.${index}.amount`)}
                                                             />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <TextField 
                                                             select
                                                             fullWidth
-                                                            name={`outcomes.${index}.month`} 
-                                                            value={outcome.month} 
+                                                            name={`whishlist.${index}.month`} 
+                                                            value={whish.month} 
                                                             onChange={handleChange}
                                                             label="month">
                                                                 <MenuItem value={1}>january</MenuItem>
@@ -108,8 +108,8 @@ function Subs() {
                                                     <Grid item>
                                                         <TextField 
                                                             select
-                                                            name={`outcomes.${index}.currency`} 
-                                                            value={outcome.currency} 
+                                                            name={`whishlist.${index}.currency`} 
+                                                            value={whish.currency} 
                                                             onChange={handleChange}
                                                             label="currency">
                                                                 <MenuItem value={'rub'}>rub</MenuItem>
@@ -137,7 +137,7 @@ function Subs() {
                                             color="primary"
                                             onClick={() => {onAdd(push)}}
                                             variant="outlined">
-                                            + Add outcome
+                                            + Add whish
                                         </Button>
                                     </Grid>
                                 </div>
@@ -154,4 +154,4 @@ function Subs() {
     )
 }
 
-export default observer(Subs)
+export default observer(Whishlist)
