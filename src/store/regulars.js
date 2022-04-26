@@ -3,28 +3,46 @@ import { makeAutoObservable } from 'mobx';
 const regularMock = [
     {
         id: 1,
-        description: 'netflix',
-        amount: 999,
+        description: 'internet',
+        amount: 720,
         currency: 'rub'
     },
     {
         id: 2,
         description: 'mobile phone',
-        amount: 650,
+        amount: 635,
         currency: 'rub'
     },
     {
         id: 3,
-        description: 'internet',
-        amount: 550,
+        description: 'vpn',
+        amount: 500,
         currency: 'rub'
     },
     {
         id: 4,
-        description: 'rental',
-        amount: 15000,
+        description: 'car washing',
+        amount: 1800,
         currency: 'rub'
-    }
+    },
+    {
+        id: 5,
+        description: 'pocket',
+        amount: 25000,
+        currency: 'rub'
+    },
+    {
+        id: 6,
+        description: 'lunches',
+        amount: 8400,
+        currency: 'rub'
+    },
+    {
+        id: 7,
+        description: 'petrol',
+        amount: 4000,
+        currency: 'rub'
+    },
 ];
 
 export const subsStore = makeAutoObservable({
@@ -32,6 +50,12 @@ export const subsStore = makeAutoObservable({
 
     save: (subs) => {
         subsStore.subs = subs
+    },
+
+    getTotal: () => {
+        let total = 0;
+        subsStore.subs.forEach((element) => total += parseInt(element.amount))
+        return total;
     },
 
     getByMonth: () => {

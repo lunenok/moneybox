@@ -23,6 +23,15 @@ export const incomesStore = makeAutoObservable({
         incomesStore.incomes = incomes
     },
 
+    getTotal: () => {
+        let total = 0;
+        total = parseInt(incomesStore.incomes.salary) * 12;
+        incomesStore.incomes.anotherIncomes.forEach((el) => {
+            total += parseInt(el.amount);
+        });
+        return total;
+    },
+
     getByMonth: () => {
         const incomesByMonts = incomesStore.incomes.anotherIncomes.reduce(
             (prev, cur) => ((prev[cur.month] = (parseInt(prev[cur.month]) || 0) + parseInt(cur.amount)), prev),

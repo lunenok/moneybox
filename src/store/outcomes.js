@@ -1,31 +1,42 @@
 import { makeAutoObservable } from "mobx";
 
-const outcomesMock = [
-    {   
-        id: 1,
-        description: 'iphone 13',
-        amount: 80000,
-        currency: 'rub',
-        month: 8
-    },
-    {   
-        id: 2,
-        description: 'adidas nmd_r1',
-        amount: 12000,
-        currency: 'rub',
-        month: 4
-    }
-];
+const outcomesMock = {
+    name: 'Payments',
+    value: [
+        {   
+            id: 1,
+            description: 'new tyres',
+            amount: 45000,
+            currency: 'rub',
+            month: 8
+        },
+        {   
+            id: 2,
+            description: 'adidas nmd_r1',
+            amount: 12000,
+            currency: 'rub',
+            month: 4
+        }
+    ]
+};
 
 export const outcomesStore = makeAutoObservable({
     outcomes: outcomesMock,
 
     save: (outcomes) => {
-        outcomesStore.outcomes = outcomes
+        outcomesStore.outcomes.value = outcomes
+    },
+
+    getTotal: () => {
+        let sum = 0;
+        outcomesStore.outcomes.value.forEach((element) => {
+            sum +=parseInt(element.amount);
+        });
+        return sum;
     },
 
     getByMonth: () => {
-        const incomesByMonts = outcomesStore.outcomes.reduce(
+        const incomesByMonts = outcomesStore.outcomes.value.reduce(
             (prev, cur) => ((prev[cur.month] = (parseInt(prev[cur.month]) || 0) + parseInt(cur.amount)), prev),
             {}
         );

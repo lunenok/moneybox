@@ -5,6 +5,8 @@ import Regulars from './regulars';
 import Payments from './payments';
 import Incomes from './incomes';
 import Whishlist from './whishlist';
+import {Link, Route, Routes, useLocation} from 'react-router-dom';
+import {appStore} from './../store/app';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -32,33 +34,58 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function BasicTabs() {
-    const [value, setValue] = React.useState(0);
+const paths = ['/payments', '/incomes', '/whishlist']
 
+const usePathname = () => {
+    const location = useLocation();
+    return location.pathname;
+}
+
+export default function BasicTabs() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-  
+
+    const path = usePathname();
+
+    const getIndexOfPath = () => {
+        const index = paths.findIndex((element) => element === path);
+        if (index === -1) {
+            return 0;
+        }
+        return index;
+    }
+
+    const [value, setValue] = React.useState(getIndexOfPath());
+
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Payments"/>
-                    <Tab label="Income"/>
-                    <Tab label="Whislist"/>
+                <Tabs value={value} onChange={handleChange} onClick={(evt) => appStore.changeTab(evt.target.dataset.index)} aria-label="basic tabs example">
+                    <Tab label="Payments" component={Link} to={paths[0]} data-index={0}/>
+                    <Tab label="Income" component={Link} to={paths[1]} data-index={1}/>
+                    <Tab label="Whislist"component={Link} to={paths[2]} data-index={2}/>
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
-                <Regulars/>
-                <Payments/>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <Incomes/>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                <Whishlist/>
-            </TabPanel>
-        </Box>
+            <Routes>
+                <Route path={paths[0]} exact element={
+                   <TabPanel value={value} index={0}>
+                       <Regulars/>
+                       <Payments/>
+                   </TabPanel>}>
+                </Route>
+                <Route path={paths[1]} exact element={
+                    <TabPanel value={value} index={1}>
+                        <Incomes/>
+                    </TabPanel>}>
+                </Route>
+                <Route path={paths[2]} exact element={
+                    <TabPanel value={value} index={2}>
+                        <Whishlist/>
+                    </TabPanel>}>
+                </Route>
+            </Routes>
 
+        </Box>
     );
 }

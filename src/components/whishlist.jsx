@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import {whishlistStore} from './../store/whislist';
-import {observer} from 'mobx-react-lite';
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 
 const schema = Yup.object().shape({
-    whishlist: Yup.array()
+    save: Yup.number('Must be number').required('Required'),
+    percent: Yup.string().required('Required'),
+    stuff: Yup.array()
         .of(
             Yup.object().shape({
                 id: Yup.number().required('Required'),
@@ -20,14 +21,9 @@ const schema = Yup.object().shape({
 })
 
 function Whishlist() {
-    const whishlist = whishlistStore.whishlist.map((oc) => ({
-        id: oc.id,
-        description: oc.description,
-        amount: oc.amount,
-        currency: oc.currency,
-        month: oc.month}))
-    const initialValues = {whishlist}
-    const [count, setCount] = useState(whishlist.length);
+
+    const initialValues = whishlistStore.whishlist;
+    const [count, setCount] = useState(initialValues.stuff.length);
     
     const onAdd = (pushCallback) => {
         const newItem = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
@@ -37,25 +33,62 @@ function Whishlist() {
     
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues} onSubmit={(values)=>{whishlistStore.save(values.whishlist)}} validationSchema={schema}> 
+            <Formik initialValues={initialValues} onSubmit={(values) => {whishlistStore.save(values)}} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
+                        <Grid item mb={2}>
+                            <Typography variant={'h6'}>Save</Typography>
+                            <Typography variant={'body'} mb={2}>Enter how much you want save every month (rubles)</Typography>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={1}></Grid>
+                            <Grid>
+                                <Grid container spacing={1} item mb={2}>
+                                    <Grid item>
+                                        <TextField
+                                        name={`save`}
+                                        value={values.save}
+                                        onChange={handleChange} 
+                                        onBlur={handleBlur} 
+                                        label='save'
+                                        helperText={showErrorMessageFormik(touched, errors, `save`)}
+                                        error={isErrorFormik(touched, errors, `save`)}
+                                        />
+                                    </Grid>
+                                     <Grid item>
+                                         <TextField
+                                            select
+                                            name={`percent`}
+                                            value={values.percent}
+                                            onChange={handleChange} 
+                                            onBlur={handleBlur} 
+                                            label='percent'
+                                            helperText={showErrorMessageFormik(touched, errors, `percent`)}
+                                            error={isErrorFormik(touched, errors, `percent`)}>
+                                            <MenuItem value={'yes'}>yes</MenuItem>
+                                            <MenuItem value={'no'}>no</MenuItem>
+                                        </TextField>
+                                     </Grid>
+
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
                         <Grid item mb={2}>
                             <Typography variant={'h6'} mt={3}>Whislist</Typography>
                             <Typography variant={'body'} mb={2}>Enter your whishes</Typography>
                         </Grid>
-                        <FieldArray name='whishlist'>
+                        <FieldArray name='stuff'>
                             {({insert, remove, push}) => (
                                 <div>
-                                    {values.whishlist.map((whish, index) => {
-
+                                    {values.stuff.map((whish, index) => {
                                         return (
                                             <div className='row' key={index}>
                                                 <Grid container spacing={1} mb={2} justifyContent={'start'}>
                                                     <Grid item xs={1}></Grid>
                                                     <Grid item xs={0.5}>
                                                         <TextField 
-                                                            name={`whishlist.${index}.id`}
+                                                            name={`stuff.${index}.id`}
                                                             value={whish.id} 
                                                             onChange={handleChange} 
                                                             onBlur={handleBlur} 
@@ -64,7 +97,7 @@ function Whishlist() {
                                                     </Grid>
                                                     <Grid item>
                                                         <TextField 
-                                                            name={`whishlist.${index}.description`} 
+                                                            name={`stuff.${index}.description`} 
                                                             value={whish.description} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
@@ -74,7 +107,7 @@ function Whishlist() {
                                                     </Grid>
                                                     <Grid item xs={1.5}>
                                                         <TextField 
-                                                            name={`whishlist.${index}.amount`} 
+                                                            name={`stuff.${index}.amount`} 
                                                             value={whish.amount} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
@@ -87,7 +120,7 @@ function Whishlist() {
                                                         <TextField 
                                                             select
                                                             fullWidth
-                                                            name={`whishlist.${index}.month`} 
+                                                            name={`stuff.${index}.stuff.month`} 
                                                             value={whish.month} 
                                                             onChange={handleChange}
                                                             label="month">
@@ -108,7 +141,7 @@ function Whishlist() {
                                                     <Grid item>
                                                         <TextField 
                                                             select
-                                                            name={`whishlist.${index}.currency`} 
+                                                            name={`stuff.${index}.stuff.currency`} 
                                                             value={whish.currency} 
                                                             onChange={handleChange}
                                                             label="currency">
@@ -154,4 +187,4 @@ function Whishlist() {
     )
 }
 
-export default observer(Whishlist)
+export default Whishlist

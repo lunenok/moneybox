@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {outcomesStore} from './../store/outcomes'
-import {observer} from 'mobx-react-lite'
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
@@ -20,7 +19,7 @@ const schema = Yup.object().shape({
 })
 
 function Subs() {
-    const outcomes = outcomesStore.outcomes.map((oc) => ({
+    const outcomes = outcomesStore.outcomes.value.map((oc) => ({
         id: oc.id,
         description: oc.description,
         amount: oc.amount,
@@ -36,7 +35,7 @@ function Subs() {
     };
     
     return (
-        <React.Fragment>            
+        <React.Fragment>       
             <Formik initialValues={initialValues} onSubmit={(values)=>{outcomesStore.save(values.outcomes)}} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
@@ -154,4 +153,4 @@ function Subs() {
     )
 }
 
-export default observer(Subs)
+export default Subs

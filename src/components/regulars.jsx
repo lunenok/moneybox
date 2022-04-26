@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {subsStore} from '../store/regulars'
-import {observer} from 'mobx-react-lite'
-import { Formik, Form, FieldArray} from 'formik';
+import { Formik, Form, FieldArray } from 'formik';
+import { observer } from 'mobx-react-lite';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from '../utils';
@@ -19,6 +19,7 @@ const schema = Yup.object().shape({
 })
 
 function Payments() {
+
     const subs = subsStore.subs.map((sub) => ({
         id: sub.id,
         description: sub.description,
@@ -29,7 +30,11 @@ function Payments() {
     const [isSaved, setStatus] = useState(true);
 
     useEffect(() => {
-        // Позже
+        return () => {
+            if (!isSaved) {
+                alert('NOT SAVED!!!')
+            }
+        }
     });
     
     const onAdd = (pushCallback) => {
@@ -40,12 +45,13 @@ function Payments() {
     
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues} onSubmit={(values)=> {
-                subsStore.save(values.subs)
+            <Formik initialValues={initialValues} onSubmit={(values)=> {  
                 setStatus(true)
+                console.log(isSaved)
+                subsStore.save(values.subs)
                 }} 
                 validationSchema={schema}> 
-                {({values, touched, errors, handleChange, handleBlur}) => (
+                {({values, touched, errors, handleChange, handleBlur, isSubmitting}) => (
                     <Form>
                         <Grid item mb={2}>
                             <Typography variant={'h6'}>Regular</Typography>

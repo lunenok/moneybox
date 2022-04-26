@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import Header from './components/header';
 import MainScreen from './components/main-screen';
 import {BrowserRouter} from 'react-router-dom';

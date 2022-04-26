@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {incomesStore} from '../store/income'
-import {observer} from 'mobx-react-lite'
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
@@ -186,4 +185,4 @@ function Incomes() {
     )
 }
 
-export default observer(Incomes)
+export default Incomes
