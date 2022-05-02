@@ -124,7 +124,7 @@ function Payments() {
                                                                 remove(index);
                                                                 setStatus(false);
                                                                 }}>
-                                                          X Delete
+                                                          X
                                                         </Button>
                                                     </Grid>
                                                     <Grid item xs={1}></Grid>

@@ -5,8 +5,8 @@ import Regulars from './regulars';
 import Payments from './payments';
 import Incomes from './incomes';
 import Whishlist from './whishlist';
+import {outcomesStore} from './../store/outcomes'
 import {Link, Route, Routes, useLocation} from 'react-router-dom';
-import {appStore} from './../store/app';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -46,6 +46,7 @@ export default function BasicTabs() {
         setValue(newValue);
     };
 
+    // path
     const path = usePathname();
 
     const getIndexOfPath = () => {
@@ -61,7 +62,7 @@ export default function BasicTabs() {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} onClick={(evt) => appStore.changeTab(evt.target.dataset.index)} aria-label="basic tabs example">
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Payments" component={Link} to={paths[0]} data-index={0}/>
                     <Tab label="Income" component={Link} to={paths[1]} data-index={1}/>
                     <Tab label="Whislist"component={Link} to={paths[2]} data-index={2}/>
@@ -71,7 +72,10 @@ export default function BasicTabs() {
                 <Route path={paths[0]} exact element={
                    <TabPanel value={value} index={0}>
                        <Regulars/>
-                       <Payments/>
+                       <Payments title={outcomesStore.outcomes[0].title} outcomes={outcomesStore.outcomes[0].value} index={0}/>
+                       <Payments title={outcomesStore.outcomes[1].title} outcomes={outcomesStore.outcomes[1].value} index={1}/>
+                       <Payments title={outcomesStore.outcomes[2].title} outcomes={outcomesStore.outcomes[2].value} index={2}/>
+                       {/* <Button variant="outlined" onClick={() => {outcomesStore.createNewGoup('name')}}>Add new group</Button> */}
                    </TabPanel>}>
                 </Route>
                 <Route path={paths[1]} exact element={

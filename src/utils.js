@@ -62,3 +62,31 @@ export const calculateSum = (balance, startingMoney) => {
     }, parseInt(startingMoney))
     return newArr;
 }
+
+export const compareArray = (arr1, arr2) => {
+    return JSON.stringify(arr1) === JSON.stringify(arr2);
+};
+
+export const getOutcomesWithPercentOfSave = (outcomes, incomes, amount, percent) => {
+    if (percent === 'yes') {
+        const withPercent = {...outcomes};
+        const incomesArray = {...incomes};
+        for (let i = 0; i <= 11; i++) {
+            withPercent[i] = Math.round(incomesArray[i] * (amount/100) + outcomes[i]);
+        }
+        return withPercent;
+    }
+    return addSumToEveryMonth(outcomes, amount);
+};
+
+export const getSaveAmount = (incomes, amount, isPercent) => {
+    let save = 0;
+    if (isPercent === 'yes') {
+        const incomesArray = {...incomes};
+        for (let i = 0; i <= 11; i++) {
+            save += Math.round(incomesArray[i] * (amount/100));
+        }
+        return save;
+    }
+    return parseInt(amount * 12);
+};

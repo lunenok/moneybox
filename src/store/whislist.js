@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 const whislistMock = {
     save: 10,
-    percent: 'no',
+    percent: 'yes',
     stuff: [
         {   
             id: 1,

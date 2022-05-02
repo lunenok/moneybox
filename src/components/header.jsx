@@ -14,7 +14,7 @@ function Header() {
                 <Toolbar>
                     <DiamondSharpIcon fontSize={'large'}/>
                     <Typography variant='h6' component='span'sx={{mr: 'auto'}}>
-                        MoneyBox
+                        PLAN BEST YEAR
                     </Typography>
                     <Link to='/incomes' style={{ textDecoration: 'none' }}>
                         <Button sx={{ my: 2, color: 'white', display: 'flex' }}><AttachMoneySharpIcon/>Enter data</Button>

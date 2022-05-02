@@ -18,29 +18,27 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-function Subs() {
-    const outcomes = outcomesStore.outcomes.value.map((oc) => ({
-        id: oc.id,
-        description: oc.description,
-        amount: oc.amount,
-        currency: oc.currency,
-        month: oc.month}))
-    const initialValues = {outcomes}
+function Subs({title, outcomes, index}) {
+
     const [count, setCount] = useState(outcomes.length);
+    const initialValues = {outcomes}
     
     const onAdd = (pushCallback) => {
-        const newSub = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
+        const newSub = {id: count + 1, description: 'new', amount: 0, currency: 'rub', month: 12}
         pushCallback(newSub)
         setCount(count + 1)
     };
-    
+
     return (
         <React.Fragment>       
-            <Formik initialValues={initialValues} onSubmit={(values)=>{outcomesStore.save(values.outcomes)}} validationSchema={schema}> 
+            <Formik 
+            initialValues={initialValues} 
+            onSubmit={(values)=>{outcomesStore.save(values.outcomes, [index])}} 
+            validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'} mt={3}>Payments</Typography>
+                            <Typography variant={'h6'} mt={3}>{title}</Typography>
                             <Typography variant={'body'} mb={2}>Enter your non-regular outcomes</Typography>
                         </Grid>
                         <FieldArray name='outcomes'>
@@ -52,7 +50,7 @@ function Subs() {
                                             <div className='row' key={index}>
                                                 <Grid container spacing={1} mb={2} justifyContent={'start'}>
                                                     <Grid item xs={1}></Grid>
-                                                    <Grid item xs={0.5}>
+                                                    <Grid item xs={0.6}>
                                                         <TextField 
                                                             name={`outcomes.${index}.id`}
                                                             value={outcome.id} 
@@ -121,7 +119,7 @@ function Subs() {
                                                             color="error"
                                                             variant='outlined'
                                                             onClick={() => remove(index)}>
-                                                          X Delete
+                                                          X
                                                         </Button>
                                                     </Grid>
                                                     <Grid item xs={1}></Grid>
@@ -134,7 +132,9 @@ function Subs() {
                                             type="button"
                                             margin="normal"
                                             color="primary"
-                                            onClick={() => {onAdd(push)}}
+                                            onClick={() => {
+                                                onAdd(push)
+                                            }}
                                             variant="outlined">
                                             + Add outcome
                                         </Button>
@@ -142,7 +142,7 @@ function Subs() {
                                 </div>
                             )}
                         </FieldArray>
-                        <Grid container mt={2}>
+                        <Grid container mt={2} mb={2}>
                             <Grid item xs={1}></Grid>
                             <Button type='submit' variant="outlined">Save</Button>
                         </Grid>

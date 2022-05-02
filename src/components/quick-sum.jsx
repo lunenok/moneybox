@@ -3,22 +3,27 @@ import { observer } from 'mobx-react-lite';
 import { outcomesStore } from './../store/outcomes';
 import { subsStore } from './../store/regulars';
 import { incomesStore } from '../store/income';
+import { whishlistStore } from './../store/whislist';
+import { Container, Grid } from '@mui/material';
+import { getSaveAmount } from './../utils';
+
 
 const QuickSum = observer(() => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
-    const incomes = incomesStore.getTotal();
-
-    console.log('i was rerender!');
+    const incomesTotal = incomesStore.getTotal();
+    const incomesArray = incomesStore.getByMonth()
+    const save = getSaveAmount(incomesArray, whishlistStore.whishlist.save, whishlistStore.whishlist.percent);
 
     return (
-        <React.Fragment>
-            <div>
-               Outcomes: {outcomes}
-            </div>
-            <div>
-                Incomes: {incomes}
-            </div>
-        </React.Fragment>
+        <Container>
+            <Grid item>
+                Year incomes: {incomesTotal}, 
+                Save: {save}
+            </Grid>
+            <Grid item>
+               Year outcomes: {outcomes}
+            </Grid>
+        </Container>
 
     );
 });

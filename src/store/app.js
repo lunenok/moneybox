@@ -1,11 +1,9 @@
 import { makeAutoObservable } from "mobx";
 
 export const appStore = makeAutoObservable({
-    app: {
-        lastTab: 0
-    },
+    currentMonth: new Date().getMonth(),
 
-    changeTab: (index) => {
-        appStore.app.lastTab = index;
+    changeCurrentMonth: (month) => {
+        appStore.currentMonth = month
     }
 })

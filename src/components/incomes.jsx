@@ -21,13 +21,13 @@ const schema = Yup.object().shape({
 })
 
 function Incomes() {
-    const anotherIncomes = incomesStore.incomes.anotherIncomes.map((oc) => ({
+    const anotherIncomes = incomesStore.anotherIncomes.map((oc) => ({
         id: oc.id,
         description: oc.description,
         amount: oc.amount,
         currency: oc.currency,
         month: oc.month}))
-    const initialValues = {balance: incomesStore.incomes.balance, salary: incomesStore.incomes.salary, anotherIncomes};
+    const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes};
     const [count, setCount] = useState(anotherIncomes.length);
     
     const onAdd = (pushCallback) => {
@@ -153,7 +153,7 @@ function Incomes() {
                                                             color="error"
                                                             variant='outlined'
                                                             onClick={() => remove(index)}>
-                                                          X Delete
+                                                          X
                                                         </Button>
                                                     </Grid>
                                                     <Grid item xs={1}></Grid>

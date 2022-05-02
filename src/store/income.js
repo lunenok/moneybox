@@ -1,7 +1,7 @@
-import { makeAutoObservable } from "mobx";
-import { addSumToEveryMonth } from './../utils';
+import { makeAutoObservable, toJS } from "mobx";
+import { addSumToEveryMonth, compareArray } from './../utils';
 
-const incomeMock = {
+export const incomesStore = makeAutoObservable({
     balance: 30000,
     salary: 100000,
     anotherIncomes: [
@@ -13,30 +13,28 @@ const incomeMock = {
             currency: 'rub'
 
         }
-    ]
-};
+    ],
 
-export const incomesStore = makeAutoObservable({
-    incomes: incomeMock,
-
-    save: (incomes) => {
-        incomesStore.incomes = incomes
+    save: ({salary, balance, anotherIncomes}) => {
+        if (incomesStore.balance !== balance) {incomesStore.balance = balance};
+        if (incomesStore.salary !== salary ){incomesStore.salary = salary};
+        if (!compareArray(toJS(incomesStore.anotherIncomes), anotherIncomes)) {incomesStore.anotherIncomes = anotherIncomes};
     },
 
     getTotal: () => {
         let total = 0;
-        total = parseInt(incomesStore.incomes.salary) * 12;
-        incomesStore.incomes.anotherIncomes.forEach((el) => {
+        total = parseInt(incomesStore.salary) * 12;
+        incomesStore.anotherIncomes.forEach((el) => {
             total += parseInt(el.amount);
         });
         return total;
     },
 
     getByMonth: () => {
-        const incomesByMonts = incomesStore.incomes.anotherIncomes.reduce(
+        const incomesByMonts = incomesStore.anotherIncomes.reduce(
             (prev, cur) => ((prev[cur.month] = (parseInt(prev[cur.month]) || 0) + parseInt(cur.amount)), prev),
             {}
         );
-        return addSumToEveryMonth(incomesByMonts, incomesStore.incomes.salary);
+        return addSumToEveryMonth(incomesByMonts, incomesStore.salary);
     }
 });

@@ -11,7 +11,7 @@ import {subsStore} from './../store/regulars';
 import {whishlistStore} from './../store/whislist';
 import {incomesStore} from './../store/income';
 import {outcomesStore} from './../store/outcomes';
-import {addSumToEveryMonth, createArrayCashFlow, calculateBalance, calculateSum} from './../utils';
+import {addSumToEveryMonth, createArrayCashFlow, calculateBalance, calculateSum, getOutcomesWithPercentOfSave} from './../utils';
 
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -20,23 +20,10 @@ export default function Calculation() {
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
     const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getByMonth(), subsStore.getByMonth()));
-    
-    console.log(outcomesStore.getByMonth());
 
-    const getOutcomesWithPercentOfSave = (amount, percent) => {
-        if (percent === 'yes') {
-            const withPercent = {...outcomes};
-            for (let i = 0; i <= 11; i++) {
-                withPercent[i] = Math.round(outcomes[i] * (1 + amount/100));
-            }
-            return withPercent;
-        }
-        return addSumToEveryMonth(outcomes, amount);
-    };
-
-    const outcomesWithSave = createArrayCashFlow(getOutcomesWithPercentOfSave(whishlistStore.whishlist.save, whishlistStore.whishlist.percent));
+    const outcomesWithSave = createArrayCashFlow(getOutcomesWithPercentOfSave(outcomes, incomes, whishlistStore.whishlist.save, whishlistStore.whishlist.percent));
     const balance = calculateBalance(incomes, whishes, outcomesWithSave);
-    const summary = calculateSum(balance, incomesStore.incomes.balance);
+    const summary = calculateSum(balance, incomesStore.balance);
 
     return (
     <React.Fragment>

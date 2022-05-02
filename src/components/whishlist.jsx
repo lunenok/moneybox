@@ -155,7 +155,7 @@ function Whishlist() {
                                                             color="error"
                                                             variant='outlined'
                                                             onClick={() => remove(index)}>
-                                                          X Delete
+                                                          X
                                                         </Button>
                                                     </Grid>
                                                     <Grid item xs={1}></Grid>
