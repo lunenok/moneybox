@@ -2,14 +2,14 @@ import { makeAutoObservable, toJS } from "mobx";
 import { addSumToEveryMonth, compareArray } from './../utils';
 
 export const incomesStore = makeAutoObservable({
-    balance: 30000,
+    balance: 0,
     salary: 100000,
     anotherIncomes: [
         {
             id: 1,
-            description: 'gift',
-            amount: 13000,
-            month: 9,
+            description: 'premium',
+            amount: 100000,
+            month: 5,
             currency: 'rub'
 
         }

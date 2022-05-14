@@ -43,6 +43,24 @@ const regularMock = [
         amount: 4000,
         currency: 'rub'
     },
+    {
+        id: 8,
+        description: 'GYM',
+        amount: 6000,
+        currency: 'rub'
+    },
+    {
+        id: 9,
+        description: 'sports nutrition',
+        amount: '8000',
+        currency: 'rub'
+    },
+    {
+        id: 10,
+        description: 'coach',
+        amount: 12000,
+        currency: 'rub'
+    }
 ];
 
 export const subsStore = makeAutoObservable({
@@ -55,7 +73,7 @@ export const subsStore = makeAutoObservable({
     getTotal: () => {
         let total = 0;
         subsStore.subs.forEach((element) => total += parseInt(element.amount))
-        return total;
+        return total * 12;
     },
 
     getByMonth: () => {
