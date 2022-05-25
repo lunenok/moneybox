@@ -4,6 +4,7 @@ import Calculation from './calculation';
 import Login from './login';
 import { Route, Routes} from 'react-router-dom';
 import InputingInformation from './input-info';
+import SignUp from './sign-up';
 
 export default function MainScreen() {
   
@@ -15,6 +16,8 @@ export default function MainScreen() {
                 <Route path='/calculation' element={<Calculation />}>
                 </Route>
                 <Route path='/account' element={<Login />}>
+                </Route>
+                <Route path='/register' element={<SignUp />}>
                 </Route>
             </Routes>
         </Container>
