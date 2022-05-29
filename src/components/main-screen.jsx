@@ -17,7 +17,9 @@ export default function MainScreen() {
                 </Route>
                 <Route path='/account' element={<Login />}>
                 </Route>
-                <Route path='/register' element={<SignUp />}>
+                <Route path='/register' element={<SignUp/>}>
+                </Route>
+                <Route path='/login' element={<Login/>}>
                 </Route>
             </Routes>
         </Container>

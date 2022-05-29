@@ -1,16 +1,12 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { outcomesStore } from './../store/outcomes';
-import { subsStore } from './../store/regulars';
-import { incomesStore } from '../store/income';
-import { whishlistStore } from './../store/whislist';
 import { Container, Grid } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { getSaveAmount } from './../utils';
 
 
-const QuickSum = observer(() => {
+const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore}) => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
     const incomesTotal = incomesStore.getTotal();
     const incomesArray = incomesStore.getByMonth()

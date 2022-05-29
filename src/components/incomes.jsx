@@ -4,6 +4,7 @@ import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
+import withAuthComponent from './../components/hocs/withAuthComponent';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -20,7 +21,7 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-function Incomes() {
+const Incomes = () => {
     const anotherIncomes = incomesStore.anotherIncomes.map((oc) => ({
         id: oc.id,
         description: oc.description,
@@ -185,4 +186,4 @@ function Incomes() {
     )
 }
 
-export default Incomes
+export default withAuthComponent(Incomes)

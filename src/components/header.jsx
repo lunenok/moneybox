@@ -3,11 +3,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FunctionsSharpIcon from '@mui/icons-material/FunctionsSharp';
 import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
 import DiamondSharpIcon from '@mui/icons-material/DiamondSharp';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import QuickSum from './quick-sum';
+import { outcomesStore } from './../store/outcomes';
+import { subsStore } from './../store/regulars';
+import { incomesStore } from '../store/income';
+import { whishlistStore } from './../store/whislist';
 
-function Header() {
+const Header = observer(({store}) => {
     return (
         <AppBar sx={{position: 'sticky'}}>
             <Container>
@@ -22,20 +27,27 @@ function Header() {
                     <Link to='/calculation' style={{ textDecoration: 'none' }}>
                         <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }}><FunctionsSharpIcon/>Calculation</Button>
                     </Link>
-                    <Link to='/account' style={{ textDecoration: 'none' }}>
-                        <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }}><AccountCircleIcon/>account settings
-                        </Button>
-                    </Link>
+                    {store.account.email ? 
+                       <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }} onClick={() => {store.signOut()}}>
+                           <AccountCircleIcon/>Log out of {store.account.profile}
+                       </Button> :
+                       <Link to='/login' style={{ textDecoration: 'none' }}>
+                           <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }}><AccountCircleIcon/>Sign in
+                           </Button>
+                       </Link> 
+                    }
+
+                    <span>{store.account.email}</span>
                 </Toolbar>
                 <Container>
                     <Grid container mb={2}>
                         <Grid item xs={7}></Grid>
-                        <QuickSum/>
+                        <QuickSum subsStore={subsStore} incomesStore={incomesStore} whishlistStore={whishlistStore} outcomesStore={outcomesStore}/>
                     </Grid>
                 </Container>
             </Container>    
         </AppBar>
     )
-}
+})
 
-export default Header
+export default Header;

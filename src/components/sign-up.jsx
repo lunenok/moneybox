@@ -1,28 +1,11 @@
 import React, {useState} from 'react';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {app} from './../firebase';
+import {authStore} from './../store/auth';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 
 export default function SignUp() {
-    const auth = getAuth(app);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [nickname, setNickname] = useState("");
-    
-    const register = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(errorMessage)
-          // ..
-        });
-    }
 
     return (
         <Grid container spacing={2} mt={4} direction={'column'} alignItems="center" justifyContent="center">
@@ -39,7 +22,7 @@ export default function SignUp() {
                     <TextField name='password' label='Password' value={password} onChange={(e) => setPassword(e.target.value)}></TextField>
                 </Grid>
                 <Grid item>
-                    <Button name='register' variant="outlined" onClick={register}>Register</Button>
+                    <Button name='register' variant="outlined" onClick={() => {authStore.register(email, password)}}>Register</Button>
                 </Grid>
         </Grid>
     )
