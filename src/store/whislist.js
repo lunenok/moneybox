@@ -1,4 +1,7 @@
 import { makeAutoObservable } from "mobx";
+import { getAuth } from 'firebase/auth';
+import { database, app, } from './../firebase';
+import { ref, set } from "firebase/database";
 
 const whislistMock = {
     save: 10,
@@ -21,11 +24,22 @@ const whislistMock = {
     ]
 }
 
+function writeWhishes(userId, data) {
+    const db = database;
+    set(ref(db, 'whishlist/' + userId), {
+        whishlist: data,
+    });
+}
+
+const auth = getAuth(app);
+const user = auth.currentUser;
+
 export const whishlistStore = makeAutoObservable({
     whishlist: whislistMock,
 
     save: (whishlist) => {
         whishlistStore.whishlist = whishlist;
+        writeWhishes(user.uid, whishlist);
     },
 
     getByMonth: () => {

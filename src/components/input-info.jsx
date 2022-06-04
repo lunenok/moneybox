@@ -7,6 +7,7 @@ import Incomes from './incomes';
 import Whishlist from './whishlist';
 import {outcomesStore} from './../store/outcomes'
 import {Link, Route, Routes, useLocation} from 'react-router-dom';
+import withAuthComponent from './hocs/withAuthComponent';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -41,7 +42,7 @@ const usePathname = () => {
     return location.pathname;
 }
 
-export default function BasicTabs() {
+const BasicTabs = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -92,4 +93,6 @@ export default function BasicTabs() {
 
         </Box>
     );
-}
+};
+
+export default withAuthComponent(BasicTabs);

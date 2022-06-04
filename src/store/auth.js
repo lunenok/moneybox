@@ -8,6 +8,7 @@ export const authStore = makeAutoObservable({
     name: '',
     uid: '',
     account: '',
+    isAuth: false,
 
     register: (email, password) => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -46,10 +47,6 @@ export const authStore = makeAutoObservable({
             alert(error)
         });
     },
-
-    // getProfile: () => {
-    //     return authStore.account;
-    // },
 });
 
 window.auth = authStore;

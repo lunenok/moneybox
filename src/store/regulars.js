@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { writeRegular } from './../api';
 
 const regularMock = [
     {
@@ -67,7 +68,8 @@ export const subsStore = makeAutoObservable({
     subs: regularMock,
 
     save: (subs) => {
-        subsStore.subs = subs
+        subsStore.subs = subs;
+        writeRegular(subs);
     },
 
     getTotal: () => {

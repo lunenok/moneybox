@@ -4,6 +4,7 @@ import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
+import withAuthComponent from './hocs/withAuthComponent';
 
 const schema = Yup.object().shape({
     save: Yup.number('Must be number').required('Required'),
@@ -185,6 +186,6 @@ function Whishlist() {
             </Formik>
         </React.Fragment>
     )
-}
+};
 
-export default Whishlist
+export default Whishlist;

@@ -4,6 +4,7 @@ import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
+import withAuthComponent from './hocs/withAuthComponent';
 
 const schema = Yup.object().shape({
     outcomes: Yup.array()
@@ -151,6 +152,6 @@ function Subs({title, outcomes, index}) {
             </Formik>
         </React.Fragment>
     )
-}
+};
 
-export default Subs
+export default Subs;

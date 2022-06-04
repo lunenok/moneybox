@@ -12,10 +12,11 @@ import {whishlistStore} from './../store/whislist';
 import {incomesStore} from './../store/income';
 import {outcomesStore} from './../store/outcomes';
 import {addSumToEveryMonth, createArrayCashFlow, calculateBalance, calculateSum, getOutcomesWithPercentOfSave} from './../utils';
+import withAuthComponent from './hocs/withAuthComponent';
 
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-export default function Calculation() {
+const CalculationComponent = () => {
 
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
@@ -64,4 +65,6 @@ export default function Calculation() {
         </TableContainer>
     </React.Fragment>
     );
-}
+};
+
+export default withAuthComponent(CalculationComponent);

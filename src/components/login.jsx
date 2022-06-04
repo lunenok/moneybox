@@ -3,7 +3,7 @@ import {authStore} from './../store/auth';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import {Link} from 'react-router-dom';
 
-export default function SignIn() {
+const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,7 +19,7 @@ export default function SignIn() {
                     <TextField name='password' label='Password' value={password} onChange={(e) => setPassword(e.target.value)}></TextField>
                 </Grid>
                 <Grid item>
-                    <Button name='register' variant="outlined" onClick={() => {authStore.login(email, password)}}>Sign in</Button>
+                    <Button name='register' variant="outlined" onClick={() => {authStore.login(email, password);}}>Sign in</Button>
                 </Grid>
                 <Grid item>
                     <Link to='/register' style={{ textDecoration: 'none' }}>
@@ -29,3 +29,5 @@ export default function SignIn() {
         </Grid>
     )
 }
+
+export default SignIn;

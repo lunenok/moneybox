@@ -186,4 +186,4 @@ const Incomes = () => {
     )
 }
 
-export default withAuthComponent(Incomes)
+export default Incomes;

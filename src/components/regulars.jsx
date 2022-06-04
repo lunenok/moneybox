@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from '../utils';
+import { getRegular } from './../api';
 
 const schema = Yup.object().shape({
     subs: Yup.array()
@@ -27,15 +28,10 @@ function Payments() {
         currency: sub.currency}))
     const initialValues = {subs}
     const [count, setCount] = useState(subs.length);
-    const [isSaved, setStatus] = useState(true);
 
     useEffect(() => {
-        return () => {
-            if (!isSaved) {
-                alert('NOT SAVED!!!')
-            }
-        }
-    });
+        getRegular(subsStore.save);
+    }, []);
     
     const onAdd = (pushCallback) => {
         const newSub = {id: count + 1, description:'', amount: '', currency: 'rub'}
@@ -46,8 +42,6 @@ function Payments() {
     return (
         <React.Fragment>            
             <Formik initialValues={initialValues} onSubmit={(values)=> {  
-                setStatus(true)
-                console.log(isSaved)
                 subsStore.save(values.subs)
                 }} 
                 validationSchema={schema}> 
@@ -80,7 +74,6 @@ function Payments() {
                                                             value={sub.description} 
                                                             onChange={(e) => {
                                                                 handleChange(e);
-                                                                setStatus(false);
                                                             }} 
                                                             onBlur={handleBlur} 
                                                             helperText={showErrorMessageFormik(touched, errors, `subs.${index}.description`)}
@@ -93,7 +86,6 @@ function Payments() {
                                                             value={sub.amount}
                                                             onChange={(e) => {
                                                                 handleChange(e);
-                                                                setStatus(false);
                                                             }} 
                                                             onBlur={handleBlur} 
                                                             label="amount"
@@ -108,7 +100,6 @@ function Payments() {
                                                             value={sub.currency} 
                                                             onChange={(e) => {
                                                                 handleChange(e);
-                                                                setStatus(false);
                                                             }} 
                                                             label="currency">
                                                                 <MenuItem value={'rub'}>rub</MenuItem>
@@ -122,7 +113,6 @@ function Payments() {
                                                             variant='outlined'
                                                             onClick={() => {
                                                                 remove(index);
-                                                                setStatus(false);
                                                                 }}>
                                                           X
                                                         </Button>
@@ -156,4 +146,4 @@ function Payments() {
     )
 }
 
-export default observer(Payments)
+export default Payments;
