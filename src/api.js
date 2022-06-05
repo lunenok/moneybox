@@ -6,8 +6,7 @@ const auth = getAuth(app);
 const db = database;
 
 export const writeRegular = (data) => {
-    // const userUid = auth.currentUser.uid;
-    const userUid = 'AmdkXIQSinfvEWMQNTlOWsQMPuQ2';
+    const userUid = auth.currentUser.uid;
     set(ref(db, 'regulars/' + userUid), {
         regulars: data,
     });
@@ -15,10 +14,14 @@ export const writeRegular = (data) => {
 
 export const getRegular = async (action) => {
     const dbRef = ref(database);
-    // const userUid = auth.currentUser.uid;
-    const userUid = 'AmdkXIQSinfvEWMQNTlOWsQMPuQ2';
+    const userUid = auth.currentUser.uid;
 
     get(child(dbRef, 'regulars/' + userUid)).then((snapshot) => {
-        action(snapshot.val().regulars);
+        if (snapshot.exists()) {
+            action(snapshot.val().regulars);
+        } else {
+            console.log('no regulars on server')
+        }
+
     })
 };

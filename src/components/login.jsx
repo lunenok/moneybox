@@ -16,14 +16,14 @@ const SignIn = () => {
                     <TextField name='email' label='Email' placeholder='email' value={email} onChange={(e) => setEmail(e.target.value)}></TextField>
                 </Grid>
                 <Grid item>
-                    <TextField name='password' label='Password' value={password} onChange={(e) => setPassword(e.target.value)}></TextField>
+                    <TextField name='password' type='password' label='Password' value={password} onChange={(e) => setPassword(e.target.value)}></TextField>
                 </Grid>
                 <Grid item>
                     <Button name='register' variant="outlined" onClick={() => {authStore.login(email, password);}}>Sign in</Button>
                 </Grid>
                 <Grid item>
                     <Link to='/register' style={{ textDecoration: 'none' }}>
-                        <Button name='register' variant="contained" color="success">Dont have an account</Button>
+                        <Button name='register' variant="contained" color="success">Don't have an account</Button>
                     </Link>
                 </Grid>
         </Grid>

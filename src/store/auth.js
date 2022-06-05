@@ -1,6 +1,7 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {app} from './../firebase';
+import { subsStore } from './regulars';
 
 const auth = getAuth(app);
 
@@ -43,6 +44,7 @@ export const authStore = makeAutoObservable({
             runInAction(() => {
                 authStore.account = '';
               });
+              subsStore.clean();
         }).catch((error) => {
             alert(error)
         });
