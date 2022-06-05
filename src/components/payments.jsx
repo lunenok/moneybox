@@ -4,7 +4,6 @@ import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
-import withAuthComponent from './hocs/withAuthComponent';
 
 const schema = Yup.object().shape({
     outcomes: Yup.array()
@@ -34,7 +33,7 @@ function Subs({title, outcomes, index}) {
         <React.Fragment>       
             <Formik 
             initialValues={initialValues} 
-            onSubmit={(values)=>{outcomesStore.save(values.outcomes, [index])}} 
+            onSubmit={(values)=>{outcomesStore.save(values.outcomes, title, [index])}} 
             validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>

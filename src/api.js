@@ -13,8 +13,8 @@ export const writeRegular = (data) => {
 };
 
 export const getRegular = async (action) => {
-    const dbRef = ref(database);
     const userUid = auth.currentUser.uid;
+    const dbRef = ref(database);
 
     get(child(dbRef, 'regulars/' + userUid)).then((snapshot) => {
         if (snapshot.exists()) {
@@ -22,6 +22,26 @@ export const getRegular = async (action) => {
         } else {
             console.log('no regulars on server')
         }
+    })
+};
 
+export const writePayments = (data, title) => {
+    const userUid = auth.currentUser.uid;
+    console.log(title);
+    set(ref(db, 'payments/' + userUid + '/' + title), {
+        payments: data,
+    })
+}
+
+export const getPayments = async (action) => {
+    const userUid = auth.currentUser.uid;
+    const dbRef = ref(database);
+    
+    get(child(dbRef, 'payments/' + userUid)).then((snapshot) => {
+        if (snapshot.exists()) {
+            action(snapshot.val().payments);
+        } else {
+            console.log('no regulars on server')
+        }
     })
 };

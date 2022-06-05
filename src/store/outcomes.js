@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { writePayments } from "../api";
 
 const outcomesMock = [
     {
@@ -176,8 +177,10 @@ const outcomesMock = [
 export const outcomesStore = makeAutoObservable({
     outcomes: outcomesMock,
 
-    save: (outcomes, index = 0) => {
-        outcomesStore.outcomes[index].value = outcomes
+    save: (data, title, index = 0) => {
+        outcomesStore.outcomes[index].value = data;
+        outcomesStore.outcomes[index].title = title;
+        writePayments(data, title);
     },
 
     createNewGoup: (name) => {
