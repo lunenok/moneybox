@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import {subsStore} from '../store/regulars'
+import React, { useState, useEffect} from 'react'
 import { Formik, Form, FieldArray } from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from '../utils';
 import { getRegular } from './../api';
+import { observer } from 'mobx-react-lite';
 
 const schema = Yup.object().shape({
     subs: Yup.array()
@@ -15,22 +15,17 @@ const schema = Yup.object().shape({
                 amount: Yup.number().required('Required'),
                 currency: Yup.string().required('Required')
             })
-        ).required('Required')  
+        ).required('Required')
 })
 
-function Payments() {
+export const Regulars = observer(({subsStore}) => {
 
-    const subs = subsStore.subs.map((sub) => ({
-        id: sub.id,
-        description: sub.description,
-        amount: sub.amount,
-        currency: sub.currency}))
-    const initialValues = {subs}
-    const [count, setCount] = useState(subs.length);
+    const initialValues = subsStore
+    const [count, setCount] = useState(subsStore.subs.length);
 
     useEffect(() => {
         getRegular(subsStore.save);
-    }, []);
+    }, [subsStore]);
     
     const onAdd = (pushCallback) => {
         const newSub = {id: count + 1, description:'', amount: '', currency: 'rub'}
@@ -146,6 +141,4 @@ function Payments() {
             </Formik>
         </React.Fragment>
     )
-}
-
-export default Payments;
+});

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Box, Tab, Tabs} from '@mui/material';
-import Regulars from './regulars';
+import { Regulars } from './regulars';
 import Payments from './payments';
 import Incomes from './incomes';
 import Whishlist from './whishlist';
 import {outcomesStore} from './../store/outcomes'
+import {subsStore} from './../store/regulars'
 import {Link, Route, Routes, useLocation} from 'react-router-dom';
 import withAuthComponent from './hocs/withAuthComponent';
 
@@ -47,7 +48,6 @@ const BasicTabs = () => {
         setValue(newValue);
     };
 
-    // path
     const path = usePathname();
 
     const getIndexOfPath = () => {
@@ -72,7 +72,7 @@ const BasicTabs = () => {
             <Routes>
                 <Route path={paths[0]} exact element={
                    <TabPanel value={value} index={0}>
-                       <Regulars/>
+                       <Regulars subsStore={subsStore}/>
                        <Payments title={outcomesStore.outcomes[0].title} outcomes={outcomesStore.outcomes[0].value} index={0}/>
                        <Payments title={outcomesStore.outcomes[1].title} outcomes={outcomesStore.outcomes[1].value} index={1}/>
                        <Payments title={outcomesStore.outcomes[2].title} outcomes={outcomesStore.outcomes[2].value} index={2}/>
