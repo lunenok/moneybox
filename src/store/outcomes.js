@@ -4,11 +4,11 @@ import { writePayments } from "../api";
 const outcomesMock = [
     {
         title: 'Payments',
-        value: [
+        payments: [
             {   
                 id: 1,
                 description: 'adidas nmd_r1',
-                amount: 12000,
+                amount: 12,
                 currency: 'rub',
                 month: 4
             },
@@ -16,7 +16,7 @@ const outcomesMock = [
     },
     {
         title: 'Car',
-        value: [
+        payments: [
             {
                 id: 1,
                 description: 'new tyres',
@@ -42,7 +42,7 @@ const outcomesMock = [
     },
     {
         title: 'Holiday and birthdays',
-        value: [
+        payments: [
             {
                 id: 1,
                 description: 'My birthday',
@@ -173,12 +173,12 @@ const outcomesMock = [
         ]
     }
 ];
-
 export const outcomesStore = makeAutoObservable({
     outcomes: outcomesMock,
 
     save: (data, title, index = 0) => {
-        outcomesStore.outcomes[index].value = data;
+        console.log('it was saved');
+        outcomesStore.outcomes[index].payments = data;
         outcomesStore.outcomes[index].title = title;
         writePayments(data, title);
     },
@@ -190,7 +190,7 @@ export const outcomesStore = makeAutoObservable({
     getTotal: () => {
         let sum = 0;
         outcomesStore.outcomes.forEach((outcomes) => {
-            outcomes.value.forEach((element) => {
+            outcomes.payments.forEach((element) => {
                 sum +=parseInt(element.amount);
             })
         })
@@ -198,7 +198,7 @@ export const outcomesStore = makeAutoObservable({
     },
 
     getByMonth: (index = 0) => {
-        const incomesByMonts = outcomesStore.outcomes[index].value.reduce(
+        const incomesByMonts = outcomesStore.outcomes[index].payments.reduce(
             (prev, cur) => ((prev[cur.month] = (parseInt(prev[cur.month]) || 0) + parseInt(cur.amount)), prev),
             {}
         );

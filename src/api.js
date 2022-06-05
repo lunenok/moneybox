@@ -31,7 +31,7 @@ export const writePayments = (data, title) => {
     set(ref(db, 'payments/' + userUid + '/' + title), {
         payments: data,
     })
-}
+};
 
 export const getPayments = async (action) => {
     const userUid = auth.currentUser.uid;

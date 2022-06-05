@@ -73,9 +73,9 @@ const BasicTabs = () => {
                 <Route path={paths[0]} exact element={
                    <TabPanel value={value} index={0}>
                        <Regulars subsStore={subsStore}/>
-                       <Payments title={outcomesStore.outcomes[0].title} outcomes={outcomesStore.outcomes[0].value} index={0}/>
-                       <Payments title={outcomesStore.outcomes[1].title} outcomes={outcomesStore.outcomes[1].value} index={1}/>
-                       <Payments title={outcomesStore.outcomes[2].title} outcomes={outcomesStore.outcomes[2].value} index={2}/>
+                       <Payments outcomesStore={outcomesStore}/>
+                       {/* <Payments title={outcomesStore.outcomes[1].title} outcomes={outcomesStore.outcomes[1].value} index={1}/>
+                       <Payments title={outcomesStore.outcomes[2].title} outcomes={outcomesStore.outcomes[2].value} index={2}/> */}
                        {/* <Button variant="outlined" onClick={() => {outcomesStore.createNewGoup('name')}}>Add new group</Button> */}
                    </TabPanel>}>
                 </Route>
