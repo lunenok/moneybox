@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
+import { getPayments } from './../api';
 
 const schema = Yup.object().shape({
     payments: Yup.array()
@@ -18,10 +19,10 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-const Payments = observer(({outcomesStore}) => {
+const Payments = observer(({outcomesStore, type}) => {
 
-    const [count, setCount] = useState(outcomesStore.outcomes[0].payments.length);
-    const initialValues = outcomesStore.outcomes[0]
+    const [count, setCount] = useState(outcomesStore.outcomes[type].payments.length);
+    const initialValues = outcomesStore.outcomes[type]
     
     const onAdd = (pushCallback) => {
         const newSub = {id: count + 1, description: 'new', amount: 0, currency: 'rub', month: 12}
@@ -29,16 +30,20 @@ const Payments = observer(({outcomesStore}) => {
         setCount(count + 1)
     };
 
+    useEffect(() => {
+        getPayments(outcomesStore.save)
+    });
+
     return (
         <React.Fragment>       
             <Formik 
             initialValues={initialValues} 
-            onSubmit={(values)=>{outcomesStore.save(values.payments, outcomesStore.outcomes[0].title)}}
+            onSubmit={(values)=>{outcomesStore.save(values.payments, outcomesStore.outcomes[type].title, type)}}
             validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'} mt={3}>{outcomesStore.outcomes[0].title}</Typography>
+                            <Typography variant={'h6'} mt={3}>{outcomesStore.outcomes[type].title}</Typography>
                             <Typography variant={'body'} mb={2}>Enter your non-regular outcomes</Typography>
                         </Grid>
                         <FieldArray name='payments'>

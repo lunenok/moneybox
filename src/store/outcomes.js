@@ -41,7 +41,7 @@ const outcomesMock = [
         ]
     },
     {
-        title: 'Holiday and birthdays',
+        title: 'Holidays',
         payments: [
             {
                 id: 1,
@@ -173,6 +173,13 @@ const outcomesMock = [
         ]
     }
 ];
+
+export const OutcomesTypes = {
+    Payments: 0,
+    Car: 1,
+    Holidays: 2
+};
+
 export const outcomesStore = makeAutoObservable({
     outcomes: outcomesMock,
 

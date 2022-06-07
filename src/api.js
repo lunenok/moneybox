@@ -27,17 +27,16 @@ export const getRegular = async (action) => {
 
 export const writePayments = (data, title) => {
     const userUid = auth.currentUser.uid;
-    console.log(title);
     set(ref(db, 'payments/' + userUid + '/' + title), {
         payments: data,
     })
 };
 
-export const getPayments = async (action) => {
+export const getPayments = async (action, title) => {
     const userUid = auth.currentUser.uid;
     const dbRef = ref(database);
     
-    get(child(dbRef, 'payments/' + userUid)).then((snapshot) => {
+    get(child(dbRef, 'payments/' + userUid + '/' + title)).then((snapshot) => {
         if (snapshot.exists()) {
             action(snapshot.val().payments);
         } else {
