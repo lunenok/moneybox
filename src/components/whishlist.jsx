@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import {whishlistStore} from './../store/whislist';
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
-import withAuthComponent from './hocs/withAuthComponent';
+import { observer } from 'mobx-react-lite';
 
 const schema = Yup.object().shape({
     save: Yup.number('Must be number').required('Required'),
@@ -21,7 +20,7 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-function Whishlist() {
+const Whishlist = observer(({whishlistStore}) => {
 
     const initialValues = whishlistStore.whishlist;
     const [count, setCount] = useState(initialValues.stuff.length);
@@ -186,6 +185,6 @@ function Whishlist() {
             </Formik>
         </React.Fragment>
     )
-};
+});
 
 export default Whishlist;

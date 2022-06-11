@@ -1,5 +1,6 @@
 import { makeAutoObservable, toJS } from "mobx";
 import { addSumToEveryMonth, compareArray } from './../utils';
+import { writeIncomes } from './../api';
 
 export const incomesStore = makeAutoObservable({
     balance: 0,
@@ -16,9 +17,11 @@ export const incomesStore = makeAutoObservable({
     ],
 
     save: ({salary, balance, anotherIncomes}) => {
-        if (incomesStore.balance !== balance) {incomesStore.balance = balance};
-        if (incomesStore.salary !== salary ){incomesStore.salary = salary};
-        if (!compareArray(toJS(incomesStore.anotherIncomes), anotherIncomes)) {incomesStore.anotherIncomes = anotherIncomes};
+        // тут нужен рефакторинг
+        if (incomesStore.balance !== balance) {incomesStore.balance = balance}
+        if (incomesStore.salary !== salary ){incomesStore.salary = salary}
+        if (!compareArray(toJS(incomesStore.anotherIncomes), anotherIncomes)) {incomesStore.anotherIncomes = anotherIncomes}
+        writeIncomes({salary, balance, anotherIncomes});
     },
 
     getTotal: () => {

@@ -6,6 +6,8 @@ import Payments from './payments';
 import Incomes from './incomes';
 import Whishlist from './whishlist';
 import { outcomesStore } from './../store/outcomes'
+import { incomesStore } from '../store/income'
+import { whishlistStore } from './../store/whislist';
 import { subsStore } from './../store/regulars'
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { OutcomesTypes } from './../store/outcomes';
@@ -81,12 +83,12 @@ const BasicTabs = () => {
                 </Route>
                 <Route path={paths[1]} exact element={
                     <TabPanel value={value} index={1}>
-                        <Incomes/>
+                        <Incomes incomesStore={incomesStore}/>
                     </TabPanel>}>
                 </Route>
                 <Route path={paths[2]} exact element={
                     <TabPanel value={value} index={2}>
-                        <Whishlist/>
+                        <Whishlist whishlistStore={whishlistStore}/>
                     </TabPanel>}>
                 </Route>
             </Routes>

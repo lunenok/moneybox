@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import {incomesStore} from '../store/income'
-import { Formik, Form, FieldArray} from 'formik';
+import React, { useEffect, useState } from 'react'
+import { Formik, Form, FieldArray, getIn} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
-import withAuthComponent from './../components/hocs/withAuthComponent';
+import { observer } from 'mobx-react-lite';
+import { getIncomes } from '../api';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -21,7 +21,8 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-const Incomes = () => {
+const Incomes = observer(({incomesStore}) => {
+
     const anotherIncomes = incomesStore.anotherIncomes.map((oc) => ({
         id: oc.id,
         description: oc.description,
@@ -36,6 +37,10 @@ const Incomes = () => {
         pushCallback(newIncome)
         setCount(count + 1)
     };
+
+    useEffect(() => {
+        getIncomes(incomesStore.save);
+    });
     
     return (
         <React.Fragment>            
@@ -184,6 +189,6 @@ const Incomes = () => {
             </Formik>
         </React.Fragment>
     )
-}
+});
 
 export default Incomes;

@@ -5,6 +5,7 @@ import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
 import { getPayments } from './../api';
+import { OutcomesTypes } from './../store/outcomes';
 
 const schema = Yup.object().shape({
     payments: Yup.array()
@@ -21,7 +22,7 @@ const schema = Yup.object().shape({
 
 const Payments = observer(({outcomesStore, type}) => {
 
-    const [count, setCount] = useState(outcomesStore.outcomes[type].payments.length);
+    const [count, setCount] = useState(outcomesStore.outcomes[type] ? outcomesStore.outcomes[type].payments.length : 0);
     const initialValues = outcomesStore.outcomes[type]
     
     const onAdd = (pushCallback) => {
@@ -31,105 +32,112 @@ const Payments = observer(({outcomesStore, type}) => {
     };
 
     useEffect(() => {
-        getPayments(outcomesStore.save)
-    });
+        getPayments(outcomesStore.save, Object.keys(OutcomesTypes)[type]);
+    }, [outcomesStore]);
+
+    if (outcomesStore.isLoading) {
+        return <div>Loading...</div>
+    }
 
     return (
-        <React.Fragment>       
+        <React.Fragment>
             <Formik 
             initialValues={initialValues} 
-            onSubmit={(values)=>{outcomesStore.save(values.payments, outcomesStore.outcomes[type].title, type)}}
+            onSubmit={(values)=>{outcomesStore.save(values.payments, outcomesStore.outcomes[type].title)}}
             validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'} mt={3}>{outcomesStore.outcomes[type].title}</Typography>
+                            <Typography variant={'h6'} mt={3}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>
                             <Typography variant={'body'} mb={2}>Enter your non-regular outcomes</Typography>
                         </Grid>
                         <FieldArray name='payments'>
                             {({insert, remove, push}) => (
                                 <div>
-                                    {values.payments.map((payment, index) => {
-                                        return (
-                                            <div className='row' key={index}>
-                                                <Grid container spacing={1} mb={2} justifyContent={'start'}>
-                                                    <Grid item xs={1}></Grid>
-                                                    <Grid item xs={0.6}>
-                                                        <TextField 
-                                                            name={`payments.${index}.id`}
-                                                            value={payment.id} 
-                                                            onChange={handleChange} 
-                                                            onBlur={handleBlur} 
-                                                            label="#"
-                                                            disabled/>
+                                    {values.payments.length ? 
+                                        values.payments.map((payment, index) => {
+                                            return (
+                                                <div className='row' key={index}>
+                                                    <Grid container spacing={1} mb={2} justifyContent={'start'}>
+                                                        <Grid item xs={1}></Grid>
+                                                        <Grid item xs={0.6}>
+                                                            <TextField 
+                                                                name={`payments.${index}.id`}
+                                                                value={payment.id} 
+                                                                onChange={handleChange} 
+                                                                onBlur={handleBlur} 
+                                                                label="#"
+                                                                disabled/>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <TextField 
+                                                                name={`payments.${index}.description`} 
+                                                                value={payment.description} 
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur} 
+                                                                helperText={showErrorMessageFormik(touched, errors, `payments.${index}.description`)}
+                                                                error={isErrorFormik(touched, errors, `payments.${index}.description`)}
+                                                                label="name"/>
+                                                        </Grid>
+                                                        <Grid item xs={1.5}>
+                                                            <TextField 
+                                                                name={`payments.${index}.amount`} 
+                                                                value={payment.amount} 
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur} 
+                                                                label="amount"
+                                                                helperText={showErrorMessageFormik(touched, errors, `payments.${index}.amount`)}
+                                                                error={isErrorFormik(touched, errors, `payments.${index}.amount`)}
+                                                                />
+                                                        </Grid>
+                                                        <Grid item xs={2}>
+                                                            <TextField 
+                                                                select
+                                                                fullWidth
+                                                                name={`payments.${index}.month`} 
+                                                                value={payment.month} 
+                                                                onChange={handleChange}
+                                                                label="month">
+                                                                    <MenuItem value={1}>january</MenuItem>
+                                                                    <MenuItem value={2}>febrary</MenuItem>
+                                                                    <MenuItem value={3}>march</MenuItem>
+                                                                    <MenuItem value={4}>april</MenuItem>
+                                                                    <MenuItem value={5}>may</MenuItem>
+                                                                    <MenuItem value={6}>june</MenuItem>
+                                                                    <MenuItem value={7}>jule</MenuItem>
+                                                                    <MenuItem value={8}>august</MenuItem>
+                                                                    <MenuItem value={9}>september</MenuItem>
+                                                                    <MenuItem value={10}>october</MenuItem>
+                                                                    <MenuItem value={11}>november</MenuItem>
+                                                                    <MenuItem value={12}>december</MenuItem>
+                                                            </TextField>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <TextField 
+                                                                select
+                                                                name={`payments.${index}.currency`} 
+                                                                value={payment.currency} 
+                                                                onChange={handleChange}
+                                                                label="currency">
+                                                                    <MenuItem value={'rub'}>rub</MenuItem>
+                                                                    <MenuItem value={'usd'}>usd</MenuItem>
+                                                            </TextField>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Button 
+                                                                type="button" 
+                                                                color="error"
+                                                                variant='outlined'
+                                                                onClick={() => remove(index)}>
+                                                              X
+                                                            </Button>
+                                                        </Grid>
+                                                        <Grid item xs={1}></Grid>
                                                     </Grid>
-                                                    <Grid item>
-                                                        <TextField 
-                                                            name={`payments.${index}.description`} 
-                                                            value={payment.description} 
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur} 
-                                                            helperText={showErrorMessageFormik(touched, errors, `payments.${index}.description`)}
-                                                            error={isErrorFormik(touched, errors, `payments.${index}.description`)}
-                                                            label="name"/>
-                                                    </Grid>
-                                                    <Grid item xs={1.5}>
-                                                        <TextField 
-                                                            name={`payments.${index}.amount`} 
-                                                            value={payment.amount} 
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur} 
-                                                            label="amount"
-                                                            helperText={showErrorMessageFormik(touched, errors, `payments.${index}.amount`)}
-                                                            error={isErrorFormik(touched, errors, `payments.${index}.amount`)}
-                                                            />
-                                                    </Grid>
-                                                    <Grid item xs={2}>
-                                                        <TextField 
-                                                            select
-                                                            fullWidth
-                                                            name={`payments.${index}.month`} 
-                                                            value={payment.month} 
-                                                            onChange={handleChange}
-                                                            label="month">
-                                                                <MenuItem value={1}>january</MenuItem>
-                                                                <MenuItem value={2}>febrary</MenuItem>
-                                                                <MenuItem value={3}>march</MenuItem>
-                                                                <MenuItem value={4}>april</MenuItem>
-                                                                <MenuItem value={5}>may</MenuItem>
-                                                                <MenuItem value={6}>june</MenuItem>
-                                                                <MenuItem value={7}>jule</MenuItem>
-                                                                <MenuItem value={8}>august</MenuItem>
-                                                                <MenuItem value={9}>september</MenuItem>
-                                                                <MenuItem value={10}>october</MenuItem>
-                                                                <MenuItem value={11}>november</MenuItem>
-                                                                <MenuItem value={12}>december</MenuItem>
-                                                        </TextField>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <TextField 
-                                                            select
-                                                            name={`payments.${index}.currency`} 
-                                                            value={payment.currency} 
-                                                            onChange={handleChange}
-                                                            label="currency">
-                                                                <MenuItem value={'rub'}>rub</MenuItem>
-                                                                <MenuItem value={'usd'}>usd</MenuItem>
-                                                        </TextField>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Button 
-                                                            type="button" 
-                                                            color="error"
-                                                            variant='outlined'
-                                                            onClick={() => remove(index)}>
-                                                          X
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={1}></Grid>
-                                                </Grid>
-                                            </div>
-                                        )})}
+                                                </div>
+                                            )}) : 
+                                            <Typography mb={2} ml={12}>Add your fist payments</Typography>
+                                        }
                                     <Grid container justifyContent={'start'}>
                                         <Grid item xs={1}></Grid>
                                         <Button

@@ -35,12 +35,34 @@ export const writePayments = (data, title) => {
 export const getPayments = async (action, title) => {
     const userUid = auth.currentUser.uid;
     const dbRef = ref(database);
-    
+
     get(child(dbRef, 'payments/' + userUid + '/' + title)).then((snapshot) => {
         if (snapshot.exists()) {
-            action(snapshot.val().payments);
+            action(snapshot.val().payments, title);
+            console.log(snapshot.val().payments);
         } else {
-            console.log('no regulars on server')
+            console.log('no regulars on server');
+            action([], title);
         }
     })
+};
+
+export const writeIncomes = (data) => {
+    const userUid = auth.currentUser.uid;
+    set(ref(db, 'incomes/' + userUid), {
+        incomes: data
+    });
+};
+
+export const getIncomes = async (action) => {
+    const userUid = auth.currentUser.uid;
+    const dbRef = ref(database);
+    
+    get(child(dbRef, 'incomes/' + userUid)).then((snapshot) => {
+        if (snapshot.exists()) {
+            action(snapshot.val().incomes);
+        } else {
+            console.log('no incomes on server');
+        }
+    });
 };
