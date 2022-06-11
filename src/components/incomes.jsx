@@ -23,13 +23,6 @@ const schema = Yup.object().shape({
 
 const Incomes = observer(({incomesStore}) => {
 
-    // const anotherIncomes = incomesStore.anotherIncomes.map((oc) => ({
-    //     id: oc.id,
-    //     description: oc.description,
-    //     amount: oc.amount,
-    //     currency: oc.currency,
-    //     month: oc.month}))
-    // const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes};
     const initialValues = incomesStore;
     const [count, setCount] = useState(incomesStore.anotherIncomes.length);
     
@@ -41,7 +34,6 @@ const Incomes = observer(({incomesStore}) => {
 
     useEffect(() => {
         getIncomes(incomesStore.save);
-        console.log('use effect works!')
     }, [incomesStore]);
     
     return (

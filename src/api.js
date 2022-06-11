@@ -2,6 +2,7 @@ import { database, app, } from './firebase';
 import { ref, set, get, child } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { initialValue as incomesInitialValue }  from './store/income';
+import { whishlistInitialValues } from './store/whislist';
 
 const auth = getAuth(app);
 const db = database;
@@ -41,7 +42,6 @@ export const getPayments = async (action, title) => {
         if (snapshot.exists()) {
             action(snapshot.val().payments, title);
         } else {
-            console.log('no regulars on server');
             action([], title);
         }
     })
@@ -63,9 +63,30 @@ export const getIncomes = async (action) => {
             const data =snapshot.val().incomes;
             if (!data.anotherIncomes) data.anotherIncomes = [];
             action(data);
-            console.log('get incomes: ', data);
         } else {
             action(incomesInitialValue);
         }
     });
 };
+
+export const writeWhishes = (data) => {
+    const userUid = auth.currentUser.uid;
+    set(ref(db, 'whishes/' + userUid), {
+        whishes: data
+    });
+};
+
+export const getWhishes = async (action) => {
+    const userUid = auth.currentUser.uid;
+    const dbRef = ref(database);
+    
+    get(child(dbRef, 'whishes/' + userUid)).then((snapshot) => {
+        if (snapshot.exists()) {
+            const data =snapshot.val().whishes;
+            if (!data.stuff) data.stuff = [];
+            action(data);
+        } else {
+            action(whishlistInitialValues);
+        }
+    });
+}

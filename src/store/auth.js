@@ -4,6 +4,7 @@ import {app} from './../firebase';
 import { subsStore } from './regulars';
 import { outcomesStore } from './outcomes';
 import { incomesStore } from './income';
+import { whishlistStore } from './whislist';
 
 const auth = getAuth(app);
 
@@ -49,6 +50,7 @@ export const authStore = makeAutoObservable({
               subsStore.clean();
               outcomesStore.clean();
               incomesStore.clean();
+              whishlistStore.clean();
         }).catch((error) => {
             alert(error)
         });

@@ -21,7 +21,6 @@ export const incomesStore = makeAutoObservable({
 
     save: ({salary, balance, anotherIncomes}) => {
         // тут нужен рефакторинг
-        console.log(anotherIncomes);
         if (incomesStore.balance !== balance) {incomesStore.balance = balance}
         if (incomesStore.salary !== salary ){incomesStore.salary = salary}
         if (!compareArray(toJS(incomesStore.anotherIncomes), anotherIncomes)) {incomesStore.anotherIncomes = anotherIncomes}

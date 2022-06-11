@@ -4,6 +4,8 @@ import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { getWhishes } from '../api';
 
 const schema = Yup.object().shape({
     save: Yup.number('Must be number').required('Required'),
@@ -22,18 +24,24 @@ const schema = Yup.object().shape({
 
 const Whishlist = observer(({whishlistStore}) => {
 
-    const initialValues = whishlistStore.whishlist;
-    const [count, setCount] = useState(initialValues.stuff.length);
+    console.log(whishlistStore.whishlist)
+
+    useEffect(() => {
+        getWhishes(whishlistStore.save)
+        console.log('whishlist use eff')
+    }, [whishlistStore]);
+
+    const [count, setCount] = useState(whishlistStore.whishlist.stuff.length);
     
     const onAdd = (pushCallback) => {
         const newItem = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
         pushCallback(newItem)
         setCount(count + 1)
     };
-    
+
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues} onSubmit={(values) => {whishlistStore.save(values)}} validationSchema={schema}> 
+            <Formik enableReinitialize initialValues={whishlistStore.whishlist} onSubmit={(values) => {whishlistStore.save(values)}} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <Grid item mb={2}>
@@ -101,8 +109,8 @@ const Whishlist = observer(({whishlistStore}) => {
                                                             value={whish.description} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
-                                                            helperText={showErrorMessageFormik(touched, errors, `whishlist.${index}.description`)}
-                                                            error={isErrorFormik(touched, errors, `whishlist.${index}.description`)}
+                                                            helperText={showErrorMessageFormik(touched, errors, `stuff.${index}.description`)}
+                                                            error={isErrorFormik(touched, errors, `stuff.${index}.description`)}
                                                             label="name"/>
                                                     </Grid>
                                                     <Grid item xs={1.5}>
@@ -112,20 +120,20 @@ const Whishlist = observer(({whishlistStore}) => {
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
                                                             label="amount"
-                                                            helperText={showErrorMessageFormik(touched, errors, `whishlist.${index}.amount`)}
-                                                            error={isErrorFormik(touched, errors, `whishlist.${index}.amount`)}
+                                                            helperText={showErrorMessageFormik(touched, errors, `stuff.${index}.amount`)}
+                                                            error={isErrorFormik(touched, errors, `stuff.${index}.amount`)}
                                                             />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <TextField 
                                                             select
                                                             fullWidth
-                                                            name={`stuff.${index}.stuff.month`} 
+                                                            name={`stuff.${index}.month`} 
                                                             value={whish.month} 
                                                             onChange={handleChange}
                                                             label="month">
-                                                                <MenuItem value={1}>january</MenuItem>
                                                                 <MenuItem value={2}>febrary</MenuItem>
+                                                                <MenuItem value={1}>january</MenuItem>
                                                                 <MenuItem value={3}>march</MenuItem>
                                                                 <MenuItem value={4}>april</MenuItem>
                                                                 <MenuItem value={5}>may</MenuItem>
