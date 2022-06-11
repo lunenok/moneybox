@@ -3,6 +3,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import {app} from './../firebase';
 import { subsStore } from './regulars';
 import { outcomesStore } from './outcomes';
+import { incomesStore } from './income';
 
 const auth = getAuth(app);
 
@@ -47,6 +48,7 @@ export const authStore = makeAutoObservable({
               });
               subsStore.clean();
               outcomesStore.clean();
+              incomesStore.clean();
         }).catch((error) => {
             alert(error)
         });

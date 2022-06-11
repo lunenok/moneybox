@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Formik, Form, FieldArray, getIn} from 'formik';
+import { Formik, Form, FieldArray } from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
@@ -23,14 +23,15 @@ const schema = Yup.object().shape({
 
 const Incomes = observer(({incomesStore}) => {
 
-    const anotherIncomes = incomesStore.anotherIncomes.map((oc) => ({
-        id: oc.id,
-        description: oc.description,
-        amount: oc.amount,
-        currency: oc.currency,
-        month: oc.month}))
-    const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes};
-    const [count, setCount] = useState(anotherIncomes.length);
+    // const anotherIncomes = incomesStore.anotherIncomes.map((oc) => ({
+    //     id: oc.id,
+    //     description: oc.description,
+    //     amount: oc.amount,
+    //     currency: oc.currency,
+    //     month: oc.month}))
+    // const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes};
+    const initialValues = incomesStore;
+    const [count, setCount] = useState(incomesStore.anotherIncomes.length);
     
     const onAdd = (pushCallback) => {
         const newIncome = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
@@ -40,7 +41,8 @@ const Incomes = observer(({incomesStore}) => {
 
     useEffect(() => {
         getIncomes(incomesStore.save);
-    });
+        console.log('use effect works!')
+    }, [incomesStore]);
     
     return (
         <React.Fragment>            

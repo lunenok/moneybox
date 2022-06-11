@@ -194,10 +194,6 @@ export const outcomesStore = makeAutoObservable({
         outcomesStore.isLoading = false;
     },
 
-    createNewGoup: (name) => {
-        outcomesStore.outcomes.push({title: name, value: []})
-    },
-
     getTotal: () => {
         let sum = 0;
         outcomesStore.outcomes.forEach((outcomes) => {

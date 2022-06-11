@@ -2,22 +2,26 @@ import { makeAutoObservable, toJS } from "mobx";
 import { addSumToEveryMonth, compareArray } from './../utils';
 import { writeIncomes } from './../api';
 
+export const initialValue = {balance: 0, salary: 0, anotherIncomes: []};
+
 export const incomesStore = makeAutoObservable({
     balance: 0,
-    salary: 100000,
-    anotherIncomes: [
-        {
-            id: 1,
-            description: 'premium',
-            amount: 100000,
-            month: 5,
-            currency: 'rub'
+    salary: 0,
+    anotherIncomes: [],
+    // anotherIncomes: [
+    //     {
+    //         id: 1,
+    //         description: 'premium',
+    //         amount: 100000,
+    //         month: 5,
+    //         currency: 'rub'
 
-        }
-    ],
+    //     }
+    // ],
 
     save: ({salary, balance, anotherIncomes}) => {
         // тут нужен рефакторинг
+        console.log(anotherIncomes);
         if (incomesStore.balance !== balance) {incomesStore.balance = balance}
         if (incomesStore.salary !== salary ){incomesStore.salary = salary}
         if (!compareArray(toJS(incomesStore.anotherIncomes), anotherIncomes)) {incomesStore.anotherIncomes = anotherIncomes}
@@ -39,5 +43,14 @@ export const incomesStore = makeAutoObservable({
             {}
         );
         return addSumToEveryMonth(incomesByMonts, incomesStore.salary);
-    }
+    },
+
+    clean: () => {
+        incomesStore.anotherIncomes = [];
+        incomesStore.balance = 0;
+        incomesStore.salary = 0;
+    },
 });
+
+
+window.incomesStore = incomesStore;

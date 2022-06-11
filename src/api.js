@@ -1,6 +1,7 @@
 import { database, app, } from './firebase';
 import { ref, set, get, child } from "firebase/database";
 import { getAuth } from 'firebase/auth';
+import { initialValue as incomesInitialValue }  from './store/income';
 
 const auth = getAuth(app);
 const db = database;
@@ -39,7 +40,6 @@ export const getPayments = async (action, title) => {
     get(child(dbRef, 'payments/' + userUid + '/' + title)).then((snapshot) => {
         if (snapshot.exists()) {
             action(snapshot.val().payments, title);
-            console.log(snapshot.val().payments);
         } else {
             console.log('no regulars on server');
             action([], title);
@@ -60,9 +60,12 @@ export const getIncomes = async (action) => {
     
     get(child(dbRef, 'incomes/' + userUid)).then((snapshot) => {
         if (snapshot.exists()) {
-            action(snapshot.val().incomes);
+            const data =snapshot.val().incomes;
+            if (!data.anotherIncomes) data.anotherIncomes = [];
+            action(data);
+            console.log('get incomes: ', data);
         } else {
-            console.log('no incomes on server');
+            action(incomesInitialValue);
         }
     });
 };
