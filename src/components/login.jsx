@@ -9,8 +9,6 @@ const SignIn = observer(({authStore}) => {
 
     if (authStore.isAuth) return <Navigate to='/payments'></Navigate>
 
-    // Компонент ререндерится при каждом изменение input
-
     return (
         <Grid container spacing={2} mt={4} direction={'column'} alignItems="center" justifyContent="center">
                 <Grid item>
