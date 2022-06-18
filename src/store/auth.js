@@ -9,8 +9,6 @@ import { whishlistStore } from './whislist';
 const auth = getAuth(app);
 
 export const authStore = makeAutoObservable({
-    name: '',
-    uid: '',
     account: '',
     isAuth: false,
 
@@ -18,7 +16,10 @@ export const authStore = makeAutoObservable({
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
               const user = userCredential.user;
-              authStore.account = user;
+              runInAction(() => {
+                authStore.account = user;
+                authStore.isAuth = true;
+            });
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -33,7 +34,8 @@ export const authStore = makeAutoObservable({
             const user = userCredential.user;
             runInAction(() => {
                 authStore.account = user;
-              });
+                authStore.isAuth = true;
+            });
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -46,11 +48,12 @@ export const authStore = makeAutoObservable({
         signOut(auth).then(() => {
             runInAction(() => {
                 authStore.account = '';
+                subsStore.clean();
+                outcomesStore.clean();
+                incomesStore.clean();
+                whishlistStore.clean();
+                authStore.isAuth = false;
               });
-              subsStore.clean();
-              outcomesStore.clean();
-              incomesStore.clean();
-              whishlistStore.clean();
         }).catch((error) => {
             alert(error)
         });

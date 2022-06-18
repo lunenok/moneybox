@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
-import {authStore} from './../store/auth';
 import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Navigate } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
-export default function SignUp() {
+const SignUp = observer(({authStore}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordCheck, setPassowrdCheck] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
+
+    if (authStore.isAuth) return <Navigate to='/payments'></Navigate>
 
     return (
         <Grid container spacing={2} mt={4} direction={'column'} alignItems="center" justifyContent="center">
@@ -43,4 +46,6 @@ export default function SignUp() {
                 </Grid>
         </Grid>
     )
-}
+});
+
+export default SignUp;

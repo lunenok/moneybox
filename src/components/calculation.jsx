@@ -17,7 +17,6 @@ import withAuthComponent from './hocs/withAuthComponent';
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const CalculationComponent = () => {
-
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
     const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getAllOutcomes(), subsStore.getByMonth()));

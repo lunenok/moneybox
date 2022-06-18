@@ -11,8 +11,23 @@ import { outcomesStore } from './../store/outcomes';
 import { subsStore } from './../store/regulars';
 import { incomesStore } from '../store/income';
 import { whishlistStore } from './../store/whislist';
+import { authStore } from '../store/auth';
+
+import { getPayments, getIncomes, getRegular, getWhishes } from './../api';
 
 const Header = observer(({store}) => {
+
+    React.useEffect(() => {
+        if (store.isAuth) {
+            getPayments(outcomesStore.save, 'Payments');
+            getPayments(outcomesStore.save, 'Car');
+            getPayments(outcomesStore.save, 'Holidays');
+            getRegular(subsStore.save);
+            getIncomes(incomesStore.save);
+            getWhishes(whishlistStore.save);
+        };
+    }, [store.isAuth]);
+
     return (
         <AppBar sx={{position: 'sticky'}}>
             <Container>
@@ -42,7 +57,12 @@ const Header = observer(({store}) => {
                 <Container>
                     <Grid container mb={2}>
                         <Grid item xs={7}></Grid>
-                        <QuickSum subsStore={subsStore} incomesStore={incomesStore} whishlistStore={whishlistStore} outcomesStore={outcomesStore}/>
+                        <QuickSum 
+                            subsStore={subsStore}
+                            incomesStore={incomesStore}
+                            whishlistStore={whishlistStore} 
+                            outcomesStore={outcomesStore}
+                            authStore={authStore}/>
                     </Grid>
                 </Container>
             </Container>    
