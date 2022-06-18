@@ -5,6 +5,8 @@ import {BrowserRouter} from 'react-router-dom';
 import {authStore} from './store/auth';
 
 function App() {
+  // Так можно? Или надо прокинуть store как пропс?
+  authStore.checkAuth();
   return (
     <BrowserRouter>
         <React.Fragment>
