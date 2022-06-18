@@ -1,5 +1,5 @@
 import {makeAutoObservable, runInAction} from 'mobx';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import {app} from './../firebase';
 import { subsStore } from './regulars';
 import { outcomesStore } from './outcomes';
@@ -57,6 +57,20 @@ export const authStore = makeAutoObservable({
         }).catch((error) => {
             alert(error)
         });
+    },
+
+    checkAuth: () => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                runInAction(() => {
+                    authStore.account = user;
+                    authStore.isAuth = true;
+                })
+                
+            } else {
+                console.log('user is sign out')
+            }
+        })
     },
 });
 
