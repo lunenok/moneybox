@@ -36,10 +36,6 @@ export const addSumToEveryMonth = (data, sum) => {
     return newObject;
 }
 
-export const sumPayments = (obj1, obj2, obj3) => {
-    const newObj = {};
-};
-
 export const createArrayCashFlow = (obj) => {
     const arr = [];
     for (let i = 1; i <= 12; i++) {

@@ -1,9 +1,8 @@
-import React, { useState, useEffect} from 'react'
+import React from 'react'
 import { Formik, Form, FieldArray } from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from '../utils';
-import { getRegular } from './../api';
 import { observer } from 'mobx-react-lite';
 
 const schema = Yup.object().shape({
@@ -21,11 +20,7 @@ const schema = Yup.object().shape({
 export const Regulars = observer(({subsStore}) => {
 
     const initialValues = subsStore
-    const [count, setCount] = useState(subsStore.subs.length);
-
-    useEffect(() => {
-        getRegular(subsStore.save);
-    }, [subsStore]);
+    const [count, setCount] = React.useState(subsStore.subs.length);
     
     const onAdd = (pushCallback) => {
         const newSub = {id: count + 1, description:'', amount: '', currency: 'rub'}

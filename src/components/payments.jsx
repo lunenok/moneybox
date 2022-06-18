@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
-import { getPayments } from './../api';
-import { OutcomesTypes } from './../store/outcomes';
 
 const schema = Yup.object().shape({
     payments: Yup.array()
@@ -22,7 +20,7 @@ const schema = Yup.object().shape({
 
 const Payments = observer(({outcomesStore, type}) => {
 
-    const [count, setCount] = useState(outcomesStore.outcomes[type] ? outcomesStore.outcomes[type].payments.length : 0);
+    const [count, setCount] = React.useState(outcomesStore.outcomes[type] ? outcomesStore.outcomes[type].payments.length : 0);
     const initialValues = outcomesStore.outcomes[type]
     
     const onAdd = (pushCallback) => {
@@ -30,10 +28,6 @@ const Payments = observer(({outcomesStore, type}) => {
         pushCallback(newSub)
         setCount(count + 1)
     };
-
-    useEffect(() => {
-        getPayments(outcomesStore.save, Object.keys(OutcomesTypes)[type]);
-    }, [outcomesStore]);
 
     if (outcomesStore.isLoading) {
         return <div>Loading...</div>

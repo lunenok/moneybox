@@ -4,9 +4,9 @@ import { Container, Grid } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { getSaveAmount } from './../utils';
+import { getPayments } from './../api';
 
-
-const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore}) => {
+const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore, authStore}) => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
     const incomesTotal = incomesStore.getTotal();
     const incomesArray = incomesStore.getByMonth();
@@ -20,6 +20,11 @@ const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistSto
         return <CheckIcon style={{color: '#6fbf73'}}></CheckIcon>
     };
 
+    if (!authStore.isAuth) {
+        return (<div></div>)
+    } 
+
+    
     return (
         <Container>
             <Grid item>

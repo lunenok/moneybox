@@ -4,8 +4,6 @@ import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
-import { getWhishes } from '../api';
 
 const schema = Yup.object().shape({
     save: Yup.number('Must be number').required('Required'),
@@ -23,10 +21,6 @@ const schema = Yup.object().shape({
 })
 
 const Whishlist = observer(({whishlistStore}) => {
-
-    useEffect(() => {
-        getWhishes(whishlistStore.save)
-    }, [whishlistStore]);
 
     const [count, setCount] = useState(whishlistStore.whishlist.stuff.length);
     

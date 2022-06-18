@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Formik, Form, FieldArray } from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
-import { getIncomes } from '../api';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -24,17 +23,13 @@ const schema = Yup.object().shape({
 const Incomes = observer(({incomesStore}) => {
 
     const initialValues = incomesStore;
-    const [count, setCount] = useState(incomesStore.anotherIncomes.length);
+    const [count, setCount] = React.useState(incomesStore.anotherIncomes.length);
     
     const onAdd = (pushCallback) => {
         const newIncome = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
         pushCallback(newIncome)
         setCount(count + 1)
     };
-
-    useEffect(() => {
-        getIncomes(incomesStore.save);
-    }, [incomesStore]);
     
     return (
         <React.Fragment>            

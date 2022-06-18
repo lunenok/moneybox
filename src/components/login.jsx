@@ -1,11 +1,15 @@
-import React, {useState} from 'react';
-import {authStore} from './../store/auth';
+import React from 'react';
 import { Button, Grid, TextField, Typography } from '@mui/material';
-import {Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
-const SignIn = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const SignIn = observer(({authStore}) => {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+
+    if (authStore.isAuth) return <Navigate to='/payments'></Navigate>
+
+    // Компонент ререндерится при каждом изменение input
 
     return (
         <Grid container spacing={2} mt={4} direction={'column'} alignItems="center" justifyContent="center">
@@ -19,7 +23,9 @@ const SignIn = () => {
                     <TextField name='password' type='password' label='Password' value={password} onChange={(e) => setPassword(e.target.value)}></TextField>
                 </Grid>
                 <Grid item>
-                    <Button name='register' variant="outlined" onClick={() => {authStore.login(email, password);}}>Sign in</Button>
+                    <Button name='register' variant="outlined" 
+                    onClick={() => {authStore.login(email, password);}}
+                    >Sign in</Button>
                 </Grid>
                 <Grid item>
                     <Link to='/register' style={{ textDecoration: 'none' }}>
@@ -28,6 +34,6 @@ const SignIn = () => {
                 </Grid>
         </Grid>
     )
-}
+});
 
 export default SignIn;
