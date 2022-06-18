@@ -9,7 +9,7 @@ import { getSaveAmount } from './../utils';
 const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore}) => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
     const incomesTotal = incomesStore.getTotal();
-    const incomesArray = incomesStore.getByMonth()
+    const incomesArray = incomesStore.getByMonth();
     const save = getSaveAmount(incomesArray, whishlistStore.whishlist.save, whishlistStore.whishlist.percent);
     const balance = incomesTotal - outcomes - save;
 

@@ -190,7 +190,7 @@ export const outcomesStore = makeAutoObservable({
         const index = OutcomesTypes[title];
         outcomesStore.outcomes[index].payments = data;
         outcomesStore.outcomes[index].title = title;
-        writePayments(data, title);
+        writePayments(data, title); 
         outcomesStore.isLoading = false;
     },
 
@@ -210,6 +210,28 @@ export const outcomesStore = makeAutoObservable({
             {}
         );
         return incomesByMonts
+    },
+
+    _createEmptyPaymentsObj: () => {
+        const obj = {};
+        for (let i = 1; i <= 12; i++) {
+          obj[i] = 0;
+        }
+        return obj;
+    },
+
+    getAllOutcomes: () => {
+        const differnetPayment = outcomesStore.getByMonth(0);
+        const carPayments = outcomesStore.getByMonth(1);
+        const holidayPayment = outcomesStore.getByMonth(2);
+        const newObj = outcomesStore._createEmptyPaymentsObj();
+        Object.keys(newObj).forEach((month) => {
+            newObj[month] =
+              (differnetPayment[month] || 0) +
+              (carPayments[month] || 0) +
+              (holidayPayment[month] || 0);
+          });
+        return newObj;
     },
 
     clean: () => {

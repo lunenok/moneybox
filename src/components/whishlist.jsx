@@ -24,11 +24,8 @@ const schema = Yup.object().shape({
 
 const Whishlist = observer(({whishlistStore}) => {
 
-    console.log(whishlistStore.whishlist)
-
     useEffect(() => {
         getWhishes(whishlistStore.save)
-        console.log('whishlist use eff')
     }, [whishlistStore]);
 
     const [count, setCount] = useState(whishlistStore.whishlist.stuff.length);

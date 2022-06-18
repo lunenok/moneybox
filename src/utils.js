@@ -27,7 +27,7 @@ export const addSumToMonth = (data, sum) => {
 export const addSumToEveryMonth = (data, sum) => {
     const object = { ...data };
     const newObject = {};
-    for (let i = 0; i <= 11; i++) {
+    for (let i = 1; i <= 12; i++) {
       newObject[i] = parseInt(sum);
     }
     for (const month in object) {
@@ -36,13 +36,17 @@ export const addSumToEveryMonth = (data, sum) => {
     return newObject;
 }
 
+export const sumPayments = (obj1, obj2, obj3) => {
+    const newObj = {};
+};
+
 export const createArrayCashFlow = (obj) => {
     const arr = [];
     for (let i = 1; i <= 12; i++) {
         arr.push(0);
     }
     for (const month in obj) {
-        arr[month] = obj[month];
+        arr[month - 1] = obj[month];
     }
     return arr;
 };
@@ -69,8 +73,8 @@ export const compareArray = (arr1, arr2) => {
 
 export const getOutcomesWithPercentOfSave = (outcomes, incomes, amount, percent) => {
     if (percent === 'yes') {
-        const withPercent = {...outcomes};
-        const incomesArray = {...incomes};
+        const withPercent = [...outcomes];
+        const incomesArray = [...incomes];
         for (let i = 0; i <= 11; i++) {
             withPercent[i] = Math.round(incomesArray[i] * (amount/100) + outcomes[i]);
         }
@@ -83,7 +87,7 @@ export const getSaveAmount = (incomes, amount, isPercent) => {
     let save = 0;
     if (isPercent === 'yes') {
         const incomesArray = {...incomes};
-        for (let i = 0; i <= 11; i++) {
+        for (let i = 1; i <= 12; i++) {
             save += Math.round(incomesArray[i] * (amount/100));
         }
         return save;

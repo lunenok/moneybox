@@ -14,15 +14,14 @@ import {outcomesStore} from './../store/outcomes';
 import {addSumToEveryMonth, createArrayCashFlow, calculateBalance, calculateSum, getOutcomesWithPercentOfSave} from './../utils';
 import withAuthComponent from './hocs/withAuthComponent';
 
-const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const CalculationComponent = () => {
 
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
-    const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getByMonth(), subsStore.getByMonth()));
-
-    const outcomesWithSave = createArrayCashFlow(getOutcomesWithPercentOfSave(outcomes, incomes, whishlistStore.whishlist.save, whishlistStore.whishlist.percent));
+    const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getAllOutcomes(), subsStore.getByMonth()));
+    const outcomesWithSave = getOutcomesWithPercentOfSave(outcomes, incomes, whishlistStore.whishlist.save, whishlistStore.whishlist.percent);
     const balance = calculateBalance(incomes, whishes, outcomesWithSave);
     const summary = calculateSum(balance, incomesStore.balance);
 
