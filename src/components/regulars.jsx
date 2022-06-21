@@ -4,6 +4,9 @@ import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from '../utils';
 import { observer } from 'mobx-react-lite';
+import SaveAlert from './save-alert';
+import FormObserver from './form-observer';
+
 
 const schema = Yup.object().shape({
     subs: Yup.array()
@@ -21,7 +24,8 @@ export const Regulars = observer(({subsStore}) => {
 
     const initialValues = subsStore
     const [count, setCount] = React.useState(subsStore.subs.length);
-    
+    const [isSave, setSaveStatus] = React.useState(true);
+
     const onAdd = (pushCallback) => {
         const newSub = {id: count + 1, description:'', amount: '', currency: 'rub'}
         pushCallback(newSub)
@@ -31,13 +35,18 @@ export const Regulars = observer(({subsStore}) => {
     return (
         <React.Fragment>            
             <Formik initialValues={initialValues} onSubmit={(values)=> {  
-                subsStore.save(values.subs)
+                subsStore.save(values.subs);
+                setSaveStatus(true);
                 }} 
                 validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur, isSubmitting}) => (
                     <Form>
-                        <Grid item mb={2}>
-                            <Typography variant={'h6'}>Regular</Typography>
+                        <FormObserver initialValues={initialValues.subs} name={'subs'} setStatus={setSaveStatus}/>
+                        <Grid item mb={2} display>
+                            <Grid container alignItems={'center'} direction={'row'}>
+                                <Typography variant={'h6'} mr={1}>Regular</Typography>
+                                <SaveAlert isSave={isSave}/>
+                            </Grid>
                             <Typography variant={'body'} mb={2}>Enter your regular outcomes, for example rental and subscriptions</Typography>
                         </Grid>
                         <FieldArray name='subs'>
@@ -119,7 +128,10 @@ export const Regulars = observer(({subsStore}) => {
                                             type="button"
                                             margin="normal"
                                             color="primary"
-                                            onClick={() => {onAdd(push)}}
+                                            onClick={() => {
+                                                onAdd(push);
+                                                setSaveStatus(false);
+                                            }}
                                             variant="outlined">
                                             + Add sub
                                         </Button>
