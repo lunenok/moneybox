@@ -4,6 +4,8 @@ import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
+import SaveAlert from './save-alert';
+import FormObserver from './form-observer';
 
 const schema = Yup.object().shape({
     save: Yup.number('Must be number').required('Required'),
@@ -23,6 +25,13 @@ const schema = Yup.object().shape({
 const Whishlist = observer(({whishlistStore}) => {
 
     const [count, setCount] = useState(whishlistStore.whishlist.stuff.length);
+    const [isSave, setSaveStatus] = React.useState(true);
+
+    const stateForObserver = {
+        percent: whishlistStore.whishlist.percent,
+        save: whishlistStore.whishlist.save,
+        stuff: whishlistStore.whishlist.stuff,  
+    };
     
     const onAdd = (pushCallback) => {
         const newItem = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
@@ -32,13 +41,23 @@ const Whishlist = observer(({whishlistStore}) => {
 
     return (
         <React.Fragment>            
-            <Formik enableReinitialize initialValues={whishlistStore.whishlist} onSubmit={(values) => {whishlistStore.save(values)}} validationSchema={schema}> 
+            <Formik enableReinitialize initialValues={whishlistStore.whishlist} onSubmit={(values) => {
+                whishlistStore.save(values)
+                setSaveStatus(true);
+                }} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
+                        <FormObserver initialValues={stateForObserver} setStatus={setSaveStatus}/>
+                        <Grid item display>
+                            <Grid container alignItems={'center'} direction={'row'}>
+                                <Typography variant={'h6'} mr={1}>Save</Typography>
+                                <SaveAlert isSave={isSave}/>
+                            </Grid>
+                        </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'}>Save</Typography>
                             <Typography variant={'body'} mb={2}>Enter how much you want save every month (rubles)</Typography>
                         </Grid>
+
                         <Grid container>
                             <Grid item xs={1}></Grid>
                             <Grid>

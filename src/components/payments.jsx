@@ -4,6 +4,8 @@ import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
+import SaveAlert from './save-alert';
+import FormObserver from './form-observer';
 
 const schema = Yup.object().shape({
     payments: Yup.array()
@@ -21,8 +23,9 @@ const schema = Yup.object().shape({
 const Payments = observer(({outcomesStore, type}) => {
 
     const [count, setCount] = React.useState(outcomesStore.outcomes[type] ? outcomesStore.outcomes[type].payments.length : 0);
-    const initialValues = outcomesStore.outcomes[type]
-    
+    const [isSave, setSaveStatus] = React.useState(true);
+    const initialValues = outcomesStore.outcomes[type];
+
     const onAdd = (pushCallback) => {
         const newSub = {id: count + 1, description: 'new', amount: 0, currency: 'rub', month: 12}
         pushCallback(newSub)
@@ -31,19 +34,28 @@ const Payments = observer(({outcomesStore, type}) => {
 
     if (outcomesStore.isLoading) {
         return <div>Loading...</div>
-    }
+    };
 
     return (
         <React.Fragment>
             <Formik 
             initialValues={initialValues} 
-            onSubmit={(values)=>{outcomesStore.save(values.payments, outcomesStore.outcomes[type].title)}}
+            onSubmit={(values) => {
+                outcomesStore.save(values.payments, outcomesStore.outcomes[type].title);
+                setSaveStatus(true);
+            }}
             validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
+                        <FormObserver initialValues={initialValues.payments} name={'payments'} setStatus={setSaveStatus}/>
+                        <Grid item display>
+                            <Grid container alignItems={'center'} direction={'row'}>
+                                <Typography variant={'h6'} mr={1}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>
+                                <SaveAlert isSave={isSave}/>
+                            </Grid>
+                        </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'} mt={3}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>
-                            <Typography variant={'body'} mb={2}>Enter your non-regular outcomes</Typography>
+                            <Typography variant={'body'} mb={3}>Enter your non-regular outcomes</Typography>
                         </Grid>
                         <FieldArray name='payments'>
                             {({insert, remove, push}) => (
