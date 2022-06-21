@@ -4,6 +4,8 @@ import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
+import SaveAlert from './save-alert';
+import FormObserver from './form-observer';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -24,6 +26,13 @@ const Incomes = observer(({incomesStore}) => {
 
     const initialValues = incomesStore;
     const [count, setCount] = React.useState(incomesStore.anotherIncomes.length);
+    const [isSave, setSaveStatus] = React.useState(true);
+
+    const stateForObserver = {
+        balance: initialValues.balance,
+        salary: initialValues.salary,
+        anotherIncomes: incomesStore.anotherIncomes
+    };
     
     const onAdd = (pushCallback) => {
         const newIncome = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
@@ -33,11 +42,20 @@ const Incomes = observer(({incomesStore}) => {
     
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues} onSubmit={(values)=>{incomesStore.save(values)}} validationSchema={schema}> 
+            <Formik initialValues={initialValues} onSubmit={(values) => {
+                incomesStore.save(values);
+                setSaveStatus(true);
+                }} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
+                        <FormObserver initialValues={stateForObserver} setStatus={setSaveStatus}/>
+                        <Grid item display>
+                            <Grid container alignItems={'center'} direction={'row'}>
+                                <Typography variant={'h6'} mr={1}>Balance and Salary</Typography>
+                                <SaveAlert isSave={isSave}/>
+                            </Grid>
+                        </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'}>Balance and Salary</Typography>
                             <Typography variant={'body'} mb={2}>Enter your starting balance and month salary (rubles)</Typography>
                         </Grid>
                         <Grid container>

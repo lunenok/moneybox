@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useFormikContext } from 'formik';
 
+// Имеет значение в каком порядке приходит initialValues, имеет смысл делать сортировку по алфавиту перед сравнением. Допилить.
 const FormObserver = ({initialValues, name, setStatus}) => {
     const {values} = useFormikContext();
     useEffect(() => {
-        const curr = JSON.stringify(values[name]);
+        let curr = null;
+        name ? curr = JSON.stringify(values[name]) : curr = JSON.stringify(values);
         const init = JSON.stringify(initialValues);
         if (init === curr) {
             setStatus(true);

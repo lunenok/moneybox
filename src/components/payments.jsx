@@ -36,8 +36,6 @@ const Payments = observer(({outcomesStore, type}) => {
         return <div>Loading...</div>
     };
 
-    console.log(initialValues.payments)
-
     return (
         <React.Fragment>
             <Formik 
@@ -50,10 +48,14 @@ const Payments = observer(({outcomesStore, type}) => {
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <FormObserver initialValues={initialValues.payments} name={'payments'} setStatus={setSaveStatus}/>
+                        <Grid item display>
+                            <Grid container alignItems={'center'} direction={'row'}>
+                                <Typography variant={'h6'} mr={1}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>
+                                <SaveAlert isSave={isSave}/>
+                            </Grid>
+                        </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'h6'} mt={3}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>
-                            <Typography variant={'body'} mb={2}>Enter your non-regular outcomes</Typography>
-                            <SaveAlert isSave={isSave}/>
+                            <Typography variant={'body'} mb={3}>Enter your non-regular outcomes</Typography>
                         </Grid>
                         <FieldArray name='payments'>
                             {({insert, remove, push}) => (
