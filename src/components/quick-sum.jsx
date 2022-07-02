@@ -5,6 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { getSaveAmount } from './../utils';
 import { getPayments } from './../api';
+import Loader from './loader';
 
 const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore, authStore}) => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
@@ -22,9 +23,18 @@ const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistSto
 
     if (!authStore.isAuth) {
         return (<div></div>)
-    } 
+    };
 
-    
+    if (outcomesStore.isLoading) {
+        return (
+            <Container>
+                <Grid item>
+                    <div>Loadging...</div>
+                </Grid>
+            </Container>
+        )
+    };
+
     return (
         <Container>
             <Grid item>

@@ -6,6 +6,7 @@ import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
+import Loader from './loader';
 
 const schema = Yup.object().shape({
     save: Yup.number('Must be number').required('Required'),
@@ -37,6 +38,10 @@ const Whishlist = observer(({whishlistStore}) => {
         const newItem = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
         pushCallback(newItem)
         setCount(count + 1)
+    };
+
+    if (whishlistStore.isLoading) {
+        return <Loader/>
     };
 
     return (

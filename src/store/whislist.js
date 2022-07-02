@@ -26,9 +26,11 @@ export const whishlistInitialValues = {save: 0, percent: 'yes', stuff: []}
 
 export const whishlistStore = makeAutoObservable({
     whishlist: whishlistInitialValues,
+    isLoading: true,
 
     save: (whishlist) => {
         whishlistStore.whishlist = whishlist;
+        whishlistStore.isLoading = false;
         writeWhishes(whishlist);
     },
 
@@ -40,6 +42,7 @@ export const whishlistStore = makeAutoObservable({
 
     clean: () => {
         whishlistStore.whishlist = whishlistInitialValues;
+        whishlistStore.isLoading = true;
     }
 });
 

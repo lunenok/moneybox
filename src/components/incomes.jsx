@@ -6,6 +6,7 @@ import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
+import Loader from './loader';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -23,8 +24,9 @@ const schema = Yup.object().shape({
 })
 
 const Incomes = observer(({incomesStore}) => {
-
-    const initialValues = incomesStore;
+    
+    // Это сделано, чтобы в форму не прокидывать isLoading, потому что так некорректно работает сверка initialState и currState (через useContext).
+    const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes: incomesStore.anotherIncomes};
     const [count, setCount] = React.useState(incomesStore.anotherIncomes.length);
     const [isSave, setSaveStatus] = React.useState(true);
 
@@ -38,6 +40,10 @@ const Incomes = observer(({incomesStore}) => {
         const newIncome = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
         pushCallback(newIncome)
         setCount(count + 1)
+    };
+
+    if (incomesStore.isLoading) {
+        return <Loader/>
     };
     
     return (
