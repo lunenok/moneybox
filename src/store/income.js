@@ -8,16 +8,7 @@ export const incomesStore = makeAutoObservable({
     balance: 0,
     salary: 0,
     anotherIncomes: [],
-    // anotherIncomes: [
-    //     {
-    //         id: 1,
-    //         description: 'premium',
-    //         amount: 100000,
-    //         month: 5,
-    //         currency: 'rub'
-
-    //     }
-    // ],
+    isLoading: true,
 
     save: ({salary, balance, anotherIncomes}) => {
         // тут нужен рефакторинг
@@ -25,6 +16,7 @@ export const incomesStore = makeAutoObservable({
         if (incomesStore.salary !== salary ){incomesStore.salary = salary}
         if (!compareArray(toJS(incomesStore.anotherIncomes), anotherIncomes)) {incomesStore.anotherIncomes = anotherIncomes}
         writeIncomes({salary, balance, anotherIncomes});
+        incomesStore.isLoading = false;
     },
 
     getTotal: () => {
@@ -48,6 +40,7 @@ export const incomesStore = makeAutoObservable({
         incomesStore.anotherIncomes = [];
         incomesStore.balance = 0;
         incomesStore.salary = 0;
+        incomesStore.isLoading = true;
     },
 });
 

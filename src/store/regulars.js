@@ -66,14 +66,17 @@ import { writeRegular } from './../api';
 
 export const subsStore = makeAutoObservable({
     subs: [],
+    isLoading: true,
 
     save: (subs) => {
         subsStore.subs = subs;
         writeRegular(subs);
+        subsStore.isLoading = false;
     },
 
     clean: () => {
         subsStore.subs = [];
+        subsStore.isLoading = true;
     },
 
     getTotal: () => {

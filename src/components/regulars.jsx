@@ -6,7 +6,7 @@ import {showErrorMessageFormik, isErrorFormik} from '../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
-
+import Loader from './loader';
 
 const schema = Yup.object().shape({
     subs: Yup.array()
@@ -30,6 +30,10 @@ export const Regulars = observer(({subsStore}) => {
         const newSub = {id: count + 1, description:'', amount: '', currency: 'rub'}
         pushCallback(newSub)
         setCount(count + 1)
+    };
+
+    if (subsStore.isLoading) {
+        return <Loader/>
     };
     
     return (

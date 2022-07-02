@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react-lite';
 import { Grid, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,16 +14,23 @@ import {incomesStore} from './../store/income';
 import {outcomesStore} from './../store/outcomes';
 import {addSumToEveryMonth, createArrayCashFlow, calculateBalance, calculateSum, getOutcomesWithPercentOfSave} from './../utils';
 import withAuthComponent from './hocs/withAuthComponent';
+import Loader from './loader';
 
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-const CalculationComponent = () => {
+const CalculationComponent = observer(({subsStore, whishlistStore, incomesStore, outcomesStore}) => {
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
     const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getAllOutcomes(), subsStore.getByMonth()));
     const outcomesWithSave = getOutcomesWithPercentOfSave(outcomes, incomes, whishlistStore.whishlist.save, whishlistStore.whishlist.percent);
     const balance = calculateBalance(incomes, whishes, outcomesWithSave);
     const summary = calculateSum(balance, incomesStore.balance);
+
+    if (outcomesStore.isLoading) {
+        return (
+            <Loader></Loader>
+        )
+    };
 
     return (
     <React.Fragment>
@@ -63,6 +71,10 @@ const CalculationComponent = () => {
         </TableContainer>
     </React.Fragment>
     );
+});
+
+const withStore = () => {
+    return <CalculationComponent subsStore={subsStore} incomesStore={incomesStore} outcomesStore={outcomesStore} whishlistStore={whishlistStore}/>
 };
 
-export default withAuthComponent(CalculationComponent);
+export default withAuthComponent(withStore);

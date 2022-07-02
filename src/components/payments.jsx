@@ -31,10 +31,11 @@ const Payments = observer(({outcomesStore, type}) => {
         pushCallback(newSub)
         setCount(count + 1)
     };
-
+    
     if (outcomesStore.isLoading) {
-        return <div>Loading...</div>
+        return <div></div>
     };
+    
 
     return (
         <React.Fragment>
