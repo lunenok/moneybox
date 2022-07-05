@@ -3,9 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Container, Grid } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { getSaveAmount } from './../utils';
-import { getPayments } from './../api';
-import Loader from './loader';
+import { getSaveAmount } from './../utils.ts';
 
 const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore, authStore}) => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
