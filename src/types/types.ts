@@ -3,7 +3,7 @@ export type PaymentType = {
     month: number,
     currency: string,
     description: string,
-    amout: number,
+    amount: number,
 };
 
 export type MonthFlow = {

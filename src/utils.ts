@@ -14,7 +14,7 @@ export const isErrorFormik = (touched: boolean, errors: FormikErrors<FormikValue
 };
 
 export const addSumToEveryMonth = (data: Array<number>, sum: number): MonthFlow => {
-    const object = { ...data };
+    const object = {...data };
     const newObject: MonthFlow = {}; //  Вот оно
     for (let i = 1; i <= 12; i++) {
       newObject[i] = sum;

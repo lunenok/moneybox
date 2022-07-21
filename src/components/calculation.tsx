@@ -19,6 +19,7 @@ import Loader from './loader';
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const CalculationComponent = observer(({subsStore, whishlistStore, incomesStore, outcomesStore} : any) => {
+    console.log(incomesStore.getByMonth())
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
     const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getAllOutcomes(), subsStore.getByMonth()));

@@ -70,6 +70,7 @@ const Incomes = observer(({incomesStore}) => {
                                 <Grid item mb={2}>
                                     <TextField
                                     name={`balance`}
+                                    type='number'
                                     value={values.balance}
                                     onChange={handleChange} 
                                     onBlur={handleBlur} 
@@ -82,6 +83,7 @@ const Incomes = observer(({incomesStore}) => {
                                     <TextField
                                     name={`salary`}
                                     value={values.salary}
+                                    type='number'
                                     onChange={handleChange} 
                                     onBlur={handleBlur} 
                                     label='salary'
@@ -126,6 +128,7 @@ const Incomes = observer(({incomesStore}) => {
                                                         <TextField 
                                                             name={`anotherIncomes.${index}.amount`} 
                                                             value={income.amount} 
+                                                            type='number'
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
                                                             label="amount"
