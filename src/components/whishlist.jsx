@@ -74,6 +74,7 @@ const Whishlist = observer(({whishlistStore}) => {
                                         onChange={handleChange} 
                                         onBlur={handleBlur} 
                                         label='save'
+                                        type="number"
                                         helperText={showErrorMessageFormik(touched, errors, `save`)}
                                         error={isErrorFormik(touched, errors, `save`)}
                                         />
@@ -135,6 +136,7 @@ const Whishlist = observer(({whishlistStore}) => {
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
                                                             label="amount"
+                                                            type="number"
                                                             helperText={showErrorMessageFormik(touched, errors, `stuff.${index}.amount`)}
                                                             error={isErrorFormik(touched, errors, `stuff.${index}.amount`)}
                                                             />

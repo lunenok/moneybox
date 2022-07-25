@@ -93,6 +93,7 @@ const Payments = observer(({outcomesStore, type}) => {
                                                                 onChange={handleChange}
                                                                 onBlur={handleBlur} 
                                                                 label="amount"
+                                                                type="number"
                                                                 helperText={showErrorMessageFormik(touched, errors, `payments.${index}.amount`)}
                                                                 error={isErrorFormik(touched, errors, `payments.${index}.amount`)}
                                                                 />

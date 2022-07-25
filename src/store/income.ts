@@ -31,7 +31,6 @@ export const incomesStore = makeAutoObservable({
         total = incomesStore.salary * 12;
         incomesStore.anotherIncomes.forEach((el) => {
             total += el.amount;
-            console.log(el);
         });
         return total; 
     },

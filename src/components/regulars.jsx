@@ -92,6 +92,7 @@ export const Regulars = observer(({subsStore}) => {
                                                                 }} 
                                                                 onBlur={handleBlur} 
                                                                 label="amount"
+                                                                type="number"
                                                                 helperText={showErrorMessageFormik(touched, errors, `subs.${index}.amount`)}
                                                                 error={isErrorFormik(touched, errors, `subs.${index}.amount`)}
                                                                 />
