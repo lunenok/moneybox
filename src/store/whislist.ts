@@ -1,15 +1,8 @@
 import { makeAutoObservable } from "mobx";
 import { writeWhishes } from '../api';
-import { PaymentType } from "../types/types";
+import { Whishlist } from "../types/types";
 
 export const whishlistInitialValues = {save: 0, percent: 'yes', stuff: []}
-
-// percent: 'yes' | 'no' - не работает
-type Whishlist = {
-    save: number,
-    percent: string,
-    stuff: Array<PaymentType>
-}
 
 export const whishlistStore = makeAutoObservable({
     whishlist: whishlistInitialValues as Whishlist,

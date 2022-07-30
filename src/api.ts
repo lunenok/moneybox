@@ -3,19 +3,20 @@ import { ref, set, get, child } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { initialValue as incomesInitialValue }  from './store/income';
 import { whishlistInitialValues } from './store/whislist';
+import { PaymentType, Incomes, Whishlist } from './types/types';
 
 const auth = getAuth(app);
 const db = database;
 
-export const writeRegular = (data) => {
-    const userUid = auth.currentUser.uid;
+export const writeRegular = (data: Array<PaymentType>) => {
+    const userUid = auth.currentUser?.uid;
     set(ref(db, 'regulars/' + userUid), {
         regulars: data,
     });
 };
 
-export const getRegular = async (action) => {
-    const userUid = auth.currentUser.uid;
+export const getRegular = async (action: (snapshot: Array<PaymentType>) => void) => {
+    const userUid = auth.currentUser?.uid;
     const dbRef = ref(database);
 
     get(child(dbRef, 'regulars/' + userUid)).then((snapshot) => {
@@ -27,15 +28,15 @@ export const getRegular = async (action) => {
     })
 };
 
-export const writePayments = (data, title) => {
-    const userUid = auth.currentUser.uid;
+export const writePayments = (data: Array<PaymentType>, title: string) => {
+    const userUid = auth.currentUser?.uid;
     set(ref(db, 'payments/' + userUid + '/' + title), {
         payments: data,
     })
 };
 
-export const getPayments = async (action, title) => {
-    const userUid = auth.currentUser.uid;
+export const getPayments = async (action: (snapshot: Array<PaymentType>, title: string) => void, title: string) => {
+    const userUid = auth.currentUser?.uid;
     const dbRef = ref(database);
 
     get(child(dbRef, 'payments/' + userUid + '/' + title)).then((snapshot) => {
@@ -47,15 +48,15 @@ export const getPayments = async (action, title) => {
     })
 };
 
-export const writeIncomes = (data) => {
-    const userUid = auth.currentUser.uid;
+export const writeIncomes = (data: Incomes) => {
+    const userUid = auth.currentUser?.uid;
     set(ref(db, 'incomes/' + userUid), {
         incomes: data
     });
 };
 
-export const getIncomes = async (action) => {
-    const userUid = auth.currentUser.uid;
+export const getIncomes = async (action: (snapshot: Incomes) => void) => {
+    const userUid = auth.currentUser?.uid;
     const dbRef = ref(database);
     
     get(child(dbRef, 'incomes/' + userUid)).then((snapshot) => {
@@ -69,15 +70,15 @@ export const getIncomes = async (action) => {
     });
 };
 
-export const writeWhishes = (data) => {
-    const userUid = auth.currentUser.uid;
+export const writeWhishes = (data: Whishlist) => {
+    const userUid = auth.currentUser?.uid;
     set(ref(db, 'whishes/' + userUid), {
         whishes: data
     });
 };
 
-export const getWhishes = async (action) => {
-    const userUid = auth.currentUser.uid;
+export const getWhishes = async (action: (snapshot: Whishlist) => void) => {
+    const userUid = auth.currentUser?.uid;
     const dbRef = ref(database);
     
     get(child(dbRef, 'whishes/' + userUid)).then((snapshot) => {

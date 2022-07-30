@@ -1,15 +1,10 @@
 import { makeAutoObservable, toJS } from "mobx";
-import { addSumToEveryMonth, compareArray } from './../utils';
+import { compareArray } from './../utils';
 import { writeIncomes } from '../api';
 import { PaymentType } from "../types/types";
+import { Incomes } from "../types/types";
 
 export const initialValue = {balance: 0, salary: 0, anotherIncomes: []};
-
-interface Incomes {
-    balance: number,
-    salary: number,
-    anotherIncomes: Array<PaymentType>
-};
 
 export const incomesStore = makeAutoObservable({
     balance: 0,
