@@ -16,7 +16,7 @@ export const whishlistStore = makeAutoObservable({
 
     getByMonth: () => {
         return whishlistStore.whishlist.stuff.reduce(
-            (acc, cur) => ((acc[cur.month] = (acc[cur.month] || 0) + cur.amount), acc), 
+            (acc, cur) => (((acc[cur.month] = (acc[cur.month] || 0) + cur.amount), acc)), 
             {} as {[index: string] : number} 
           );
     },

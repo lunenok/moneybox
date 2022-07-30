@@ -40,7 +40,7 @@ export const outcomesStore = makeAutoObservable({
     // Нагуглил as {[index: string]: number}, надо разобраться
     getByMonth: (index = 0) => {
         const incomesByMonts = outcomesStore.outcomes[index].payments.reduce(
-            (acc, cur) => ((acc[cur.month] = (acc[cur.month] || 0) + cur.amount), acc),
+            (acc, cur) => (((acc[cur.month] = (acc[cur.month] || 0) + cur.amount), acc)),
             {} as {[index: string]: number}
         );
         return incomesByMonts

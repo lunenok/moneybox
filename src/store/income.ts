@@ -32,7 +32,7 @@ export const incomesStore = makeAutoObservable({
 
     getByMonth: () => {
         const incomesByMonts = incomesStore.anotherIncomes.reduce(
-            (acc, cur) => ((acc[cur.month] = (acc[cur.month] || 0) + cur.amount), acc),
+            (acc, cur) => (((acc[cur.month] = (acc[cur.month] || 0) + cur.amount), acc)),
             {} as {[index: string]: number}
         );
         const obj = {} as {[index: string]: number};
