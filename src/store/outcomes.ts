@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { writePayments } from "../api";
-import { MonthFlow, PaymentType } from "../types/types";
+import { MonthFlow, PaymentType, OutcomesKinds } from "../types/types";
 
 export const OutcomesTypes = {
     Payments: 0,
@@ -8,18 +8,13 @@ export const OutcomesTypes = {
     Holidays: 2
 };
 
-type Outcome = {
-    title: string,
-    payments: Array<PaymentType>
-}
-
 const initialValues = [{title: 'Payments', payments: []}, {title: 'Car', payments: []}, {title: 'Holidays', payments: []}];
 
 export const outcomesStore = makeAutoObservable({
     outcomes: initialValues as Array<Outcome>,
     isLoading: true,
 
-    save: (data: Array<PaymentType>, title: 'Payments' | 'Car' | 'Holidays') => {
+    save: (data: Array<PaymentType>, title: OutcomesKinds) => {
         const index = OutcomesTypes[title];
         outcomesStore.outcomes[index].payments = data;
         outcomesStore.outcomes[index].title = title;
@@ -73,3 +68,8 @@ export const outcomesStore = makeAutoObservable({
         outcomesStore.isLoading = true;
     },
 });
+
+type Outcome = {
+    title: string,
+    payments: Array<PaymentType>
+}

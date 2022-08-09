@@ -14,6 +14,9 @@ const FormObserver = ({initialValues, name, setStatus}) => {
             setStatus(false);
         }
     }, [values]);
+    return (
+        <div></div>
+    )
 };
 
 export default FormObserver;

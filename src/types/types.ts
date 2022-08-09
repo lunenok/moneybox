@@ -16,9 +16,10 @@ export interface Incomes {
     anotherIncomes: Array<PaymentType>
 };
 
-// percent: 'yes' | 'no' - не работает
 export type Whishlist = {
     save: number,
-    percent: string,
+    percent: 'yes' | 'no',
     stuff: Array<PaymentType>
 }
+
+export type OutcomesKinds = 'Payments' | 'Car' | 'Holidays';

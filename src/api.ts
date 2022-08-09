@@ -3,7 +3,7 @@ import { ref, set, get, child } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { initialValue as incomesInitialValue }  from './store/income';
 import { whishlistInitialValues } from './store/whislist';
-import { PaymentType, Incomes, Whishlist } from './types/types';
+import { PaymentType, Incomes, Whishlist, OutcomesKinds } from './types/types';
 
 const auth = getAuth(app);
 const db = database;
@@ -35,7 +35,7 @@ export const writePayments = (data: Array<PaymentType>, title: string) => {
     })
 };
 
-export const getPayments = async (action: (snapshot: Array<PaymentType>, title: string) => void, title: string) => {
+export const getPayments = async (action: (snapshot: Array<PaymentType>, title: OutcomesKinds) => void, title: OutcomesKinds) => {
     const userUid = auth.currentUser?.uid;
     const dbRef = ref(database);
 

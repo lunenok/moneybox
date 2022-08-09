@@ -18,8 +18,7 @@ import Loader from './loader';
 
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-const CalculationComponent = observer(({subsStore, whishlistStore, incomesStore, outcomesStore} : any) => {
-    console.log(incomesStore.getByMonth())
+const CalculationComponent: React.FC<PropTypes> = observer(({subsStore, whishlistStore, incomesStore, outcomesStore}) => {
     const incomes = createArrayCashFlow(incomesStore.getByMonth());
     const whishes = createArrayCashFlow(whishlistStore.getByMonth());
     const outcomes = createArrayCashFlow(addSumToEveryMonth(outcomesStore.getAllOutcomes(), subsStore.getByMonth()));
@@ -74,8 +73,15 @@ const CalculationComponent = observer(({subsStore, whishlistStore, incomesStore,
     );
 });
 
-const withStore = () => {
+const withStore: React.FC = () => {
     return <CalculationComponent subsStore={subsStore} incomesStore={incomesStore} outcomesStore={outcomesStore} whishlistStore={whishlistStore}/>
+};
+
+type PropTypes = {
+    outcomesStore: any,
+    subsStore: any,
+    incomesStore: any,
+    whishlistStore: any,
 };
 
 export default withAuthComponent(withStore);

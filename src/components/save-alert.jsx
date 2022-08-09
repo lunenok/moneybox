@@ -1,6 +1,6 @@
 import React from 'react';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 const SaveAlert = ({isSave}) => {
     if (!isSave) {
@@ -11,6 +11,9 @@ const SaveAlert = ({isSave}) => {
             </React.Fragment>
         )
     };
+    return (
+        <div></div>
+    )
 };
 
 export default SaveAlert;

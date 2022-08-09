@@ -2,11 +2,12 @@ import React from 'react'
 import { Formik, Form, FieldArray } from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
-import {showErrorMessageFormik, isErrorFormik} from './../utils.ts';
+import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
 import Loader from './loader';
+import { PaymentType } from './../types/types';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -23,7 +24,7 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-const Incomes = observer(({incomesStore}) => {
+const Incomes: React.FC<PropTypes> = observer(({incomesStore}) => {
     
     // Это сделано, чтобы в форму не прокидывать isLoading, потому что так некорректно работает сверка initialState и currState (через useContext).
     const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes: incomesStore.anotherIncomes};
@@ -35,9 +36,13 @@ const Incomes = observer(({incomesStore}) => {
         salary: initialValues.salary,
         anotherIncomes: incomesStore.anotherIncomes
     };
+
+    interface pushCallback {
+        (newIncome: PaymentType): void;
+    };
     
-    const onAdd = (pushCallback) => {
-        const newIncome = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
+    const onAdd = (pushCallback: pushCallback) => {
+        const newIncome = {id: count + 1, description:'', amount: 0, currency: 'rub', month: 12}
         pushCallback(newIncome)
         setCount(count + 1)
     };
@@ -54,15 +59,15 @@ const Incomes = observer(({incomesStore}) => {
                 }} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
-                        <FormObserver initialValues={stateForObserver} setStatus={setSaveStatus}/>
-                        <Grid item display>
+                        <FormObserver initialValues={stateForObserver} name={''} setStatus={setSaveStatus}/>
+                        <Grid item>
                             <Grid container alignItems={'center'} direction={'row'}>
                                 <Typography variant={'h6'} mr={1}>Balance and Salary</Typography>
                                 <SaveAlert isSave={isSave}/>
                             </Grid>
                         </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'body'} mb={2}>Enter your starting balance and month salary (rubles)</Typography>
+                            <Typography variant={'body1'} mb={2}>Enter your starting balance and month salary (rubles)</Typography>
                         </Grid>
                         <Grid container>
                             <Grid item xs={1}></Grid>
@@ -75,8 +80,8 @@ const Incomes = observer(({incomesStore}) => {
                                     onChange={handleChange} 
                                     onBlur={handleBlur} 
                                     label='balance'
-                                    helperText={showErrorMessageFormik(touched, errors, `balance`)}
-                                    error={isErrorFormik(touched, errors, `balance`)}
+                                    helperText={showErrorMessageFormik(touched as boolean, errors, `balance`)}
+                                    error={isErrorFormik(touched as boolean, errors, `balance`)}
                                     />
                                 </Grid>
                                 <Grid item>
@@ -87,20 +92,20 @@ const Incomes = observer(({incomesStore}) => {
                                     onChange={handleChange} 
                                     onBlur={handleBlur} 
                                     label='salary'
-                                    helperText={showErrorMessageFormik(touched, errors, `salary`)}
-                                    error={isErrorFormik(touched, errors, `salary`)}
+                                    helperText={showErrorMessageFormik(touched as boolean, errors, `salary`)}
+                                    error={isErrorFormik(touched as boolean, errors, `salary`)}
                                     />
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Grid item>
                             <Typography variant={'h6'}>Another income</Typography>
-                            <Typography variant={'body'}>Here you can enter another expected incomes</Typography>
+                            <Typography variant={'body1'}>Here you can enter another expected incomes</Typography>
                         </Grid>
                         <FieldArray name='anotherIncomes'>
                             {({insert, remove, push}) => (
                                 <div>
-                                    {values.anotherIncomes.map((income, index) => {
+                                    {values.anotherIncomes.map((income: PaymentType, index: number) => {
                                         return (
                                             <div className='row' key={index}>
                                                 <Grid container spacing={1} mb={2} mt={2} justifyContent={'start'}>
@@ -120,8 +125,8 @@ const Incomes = observer(({incomesStore}) => {
                                                             value={income.description} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
-                                                            helperText={showErrorMessageFormik(touched, errors, `anotherIncomes[${index}].description`)}
-                                                            error={isErrorFormik(touched, errors, `anotherIncomes[${index}].description`)}
+                                                            helperText={showErrorMessageFormik(touched as boolean, errors, `anotherIncomes[${index}].description`)}
+                                                            error={isErrorFormik(touched as boolean, errors, `anotherIncomes[${index}].description`)}
                                                             label="name"/>
                                                     </Grid>
                                                     <Grid item xs={1.5}>
@@ -132,8 +137,8 @@ const Incomes = observer(({incomesStore}) => {
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
                                                             label="amount"
-                                                            helperText={showErrorMessageFormik(touched, errors, `anotherIncomes[${index}].amount`)}
-                                                            error={isErrorFormik(touched, errors, `anotherIncomes[${index}].amount`)}
+                                                            helperText={showErrorMessageFormik(touched as boolean, errors, `anotherIncomes[${index}].amount`)}
+                                                            error={isErrorFormik(touched as boolean, errors, `anotherIncomes[${index}].amount`)}
                                                             />
                                                     </Grid>
                                                     <Grid item xs={2}>
@@ -186,7 +191,6 @@ const Incomes = observer(({incomesStore}) => {
                                         <Grid item xs={1} ></Grid>
                                         <Button
                                             type="button"
-                                            margin="normal"
                                             color="primary"
                                             onClick={() => {onAdd(push)}}
                                             variant="outlined">
@@ -206,5 +210,9 @@ const Incomes = observer(({incomesStore}) => {
         </React.Fragment>
     )
 });
+
+type PropTypes = {
+    incomesStore: any;
+}
 
 export default Incomes;

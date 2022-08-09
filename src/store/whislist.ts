@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { writeWhishes } from '../api';
 import { Whishlist } from "../types/types";
 
-export const whishlistInitialValues = {save: 0, percent: 'yes', stuff: []}
+export let whishlistInitialValues = {save: 0, percent: 'yes' as 'yes' | 'no', stuff: []}
 
 export const whishlistStore = makeAutoObservable({
     whishlist: whishlistInitialValues as Whishlist,
