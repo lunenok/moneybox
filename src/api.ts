@@ -3,7 +3,7 @@ import { ref, set, get, child } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { initialValue as incomesInitialValue }  from './store/income';
 import { whishlistInitialValues } from './store/whislist';
-import { PaymentType, Incomes, Whishlist, OutcomesKinds } from './types/types';
+import { PaymentType, Incomes, WhishlistType, OutcomesKinds } from './types/types';
 
 const auth = getAuth(app);
 const db = database;
@@ -70,14 +70,14 @@ export const getIncomes = async (action: (snapshot: Incomes) => void) => {
     });
 };
 
-export const writeWhishes = (data: Whishlist) => {
+export const writeWhishes = (data: WhishlistType) => {
     const userUid = auth.currentUser?.uid;
     set(ref(db, 'whishes/' + userUid), {
         whishes: data
     });
 };
 
-export const getWhishes = async (action: (snapshot: Whishlist) => void) => {
+export const getWhishes = async (action: (snapshot: WhishlistType) => void) => {
     const userUid = auth.currentUser?.uid;
     const dbRef = ref(database);
     

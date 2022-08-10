@@ -36,6 +36,10 @@ const Payments = observer(({outcomesStore, type}) => {
         return <div></div>
     };
     
+    const initialValuesForObserver = {
+        title: outcomesStore.outcomes[type].title,
+        payments: initialValues.payments
+    }
 
     return (
         <React.Fragment>
@@ -48,7 +52,7 @@ const Payments = observer(({outcomesStore, type}) => {
             validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
-                        <FormObserver initialValues={initialValues.payments} name={'payments'} setStatus={setSaveStatus}/>
+                        <FormObserver initialValues={initialValuesForObserver} name={'payments'} setStatus={setSaveStatus}/>
                         <Grid item display>
                             <Grid container alignItems={'center'} direction={'row'}>
                                 <Typography variant={'h6'} mr={1}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>

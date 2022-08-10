@@ -59,7 +59,7 @@ const Incomes: React.FC<PropTypes> = observer(({incomesStore}) => {
                 }} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
-                        <FormObserver initialValues={stateForObserver} name={''} setStatus={setSaveStatus}/>
+                        <FormObserver initialValues={stateForObserver} setStatus={setSaveStatus}/>
                         <Grid item>
                             <Grid container alignItems={'center'} direction={'row'}>
                                 <Typography variant={'h6'} mr={1}>Balance and Salary</Typography>

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { writePayments } from "../api";
-import { MonthFlow, PaymentType, OutcomesKinds } from "../types/types";
+import { MonthFlow, PaymentType, OutcomesKinds, Outcome } from "../types/types";
 
 export const OutcomesTypes = {
     Payments: 0,
@@ -69,7 +69,3 @@ export const outcomesStore = makeAutoObservable({
     },
 });
 
-type Outcome = {
-    title: string,
-    payments: Array<PaymentType>
-}

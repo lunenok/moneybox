@@ -5,16 +5,16 @@ import { Regulars } from './regulars';
 import Payments from './payments';
 import Incomes from './incomes';
 import Whishlist from './whishlist';
-import { outcomesStore } from './../store/outcomes'
+import { outcomesStore } from '../store/outcomes'
 import { incomesStore } from '../store/income'
-import { whishlistStore } from './../store/whislist';
-import { subsStore } from './../store/regulars'
+import { whishlistStore } from '../store/whislist';
+import { subsStore } from '../store/regulars'
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import { OutcomesTypes } from './../store/outcomes';
+import { OutcomesTypes } from '../store/outcomes';
 import withAuthComponent from './hocs/withAuthComponent';
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+function TabPanel(props: {children: React.ReactNode, index: number, value: number}) {
+  const { children, value, index, ...other } = props;
 
   return (
     <div
@@ -47,7 +47,7 @@ const usePathname = () => {
 }
 
 const BasicTabs = () => {
-    const handleChange = (event, newValue) => {
+    const handleChange = (event: React.FormEvent, newValue: number) => {
         setValue(newValue);
     };
 
@@ -73,7 +73,7 @@ const BasicTabs = () => {
                 </Tabs>
             </Box>
             <Routes>
-                <Route path={paths[0]} exact element={
+                <Route path={paths[0]} element={
                    <TabPanel value={value} index={0}>
                        <Regulars subsStore={subsStore}/>
                        <Payments outcomesStore={outcomesStore} type={OutcomesTypes.Payments}/>
@@ -81,12 +81,12 @@ const BasicTabs = () => {
                        <Payments outcomesStore={outcomesStore} type={OutcomesTypes.Holidays}/>
                    </TabPanel>}>
                 </Route>
-                <Route path={paths[1]} exact element={
+                <Route path={paths[1]} element={
                     <TabPanel value={value} index={1}>
                         <Incomes incomesStore={incomesStore}/>
                     </TabPanel>}>
                 </Route>
-                <Route path={paths[2]} exact element={
+                <Route path={paths[2]} element={
                     <TabPanel value={value} index={2}>
                         <Whishlist whishlistStore={whishlistStore}/>
                     </TabPanel>}>

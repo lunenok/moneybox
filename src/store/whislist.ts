@@ -1,14 +1,14 @@
 import { makeAutoObservable } from "mobx";
 import { writeWhishes } from '../api';
-import { Whishlist } from "../types/types";
+import { WhishlistType } from "../types/types";
 
 export let whishlistInitialValues = {save: 0, percent: 'yes' as 'yes' | 'no', stuff: []}
 
 export const whishlistStore = makeAutoObservable({
-    whishlist: whishlistInitialValues as Whishlist,
+    whishlist: whishlistInitialValues as WhishlistType,
     isLoading: true,
 
-    save: (whishlist: Whishlist) => {
+    save: (whishlist: WhishlistType) => {
         whishlistStore.whishlist = whishlist;
         whishlistStore.isLoading = false;
         writeWhishes(whishlist);
