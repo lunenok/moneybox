@@ -7,8 +7,6 @@ const FormObserver: React.FC<PropTypes> = ({initialValues, setStatus}) => {
     let {values}: FormikProps<ContextTypes> = useFormikContext();
     useEffect(() => {
         const curr =  JSON.stringify(values)
-        console.log('curr', curr);
-        console.log('init', JSON.stringify(initialValues))
         const init = JSON.stringify(initialValues);
         if (init === curr) {
             setStatus(true);
