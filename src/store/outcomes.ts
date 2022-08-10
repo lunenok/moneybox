@@ -8,6 +8,9 @@ export const OutcomesTypes = {
     Holidays: 2
 };
 
+type OutcomesTypesKeys = keyof typeof OutcomesTypes;
+export type OutcomesTypesValues = typeof OutcomesTypes[OutcomesTypesKeys];
+
 const initialValues = [{title: 'Payments', payments: []}, {title: 'Car', payments: []}, {title: 'Holidays', payments: []}];
 
 export const outcomesStore = makeAutoObservable({

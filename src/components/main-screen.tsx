@@ -5,7 +5,7 @@ import Login from './login';
 import { Route, Routes} from 'react-router-dom';
 import InputingInformation from './input-info';
 import SignUp from './sign-up';
-import {authStore} from './../store/auth';
+import {authStore} from '../store/auth';
 
 export default function MainScreen() {
     return (

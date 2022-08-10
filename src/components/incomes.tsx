@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
 import Loader from './loader';
-import { PaymentType } from './../types/types';
+import { PaymentType, PushCallback } from './../types/types';
 
 const schema = Yup.object().shape({
     balance: Yup.number().required('Required'),
@@ -36,12 +36,8 @@ const Incomes: React.FC<PropTypes> = observer(({incomesStore}) => {
         salary: initialValues.salary,
         anotherIncomes: incomesStore.anotherIncomes
     };
-
-    interface pushCallback {
-        (newIncome: PaymentType): void;
-    };
     
-    const onAdd = (pushCallback: pushCallback) => {
+    const onAdd = (pushCallback: PushCallback) => {
         const newIncome = {id: count + 1, description:'', amount: 0, currency: 'rub', month: 12}
         pushCallback(newIncome)
         setCount(count + 1)

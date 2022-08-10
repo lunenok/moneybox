@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FormikProps, useFormikContext } from 'formik';
-import { IncomesType, OutcomesType, RegularsType, WhishlistType } from '../types/types';
+import { IncomesType, RegularsType, WhishlistType, Outcome } from '../types/types';
 
 // Имеет значение в каком порядке приходит initialValues, имеет смысл делать сортировку по алфавиту перед сравнением. Допилить.
 const FormObserver: React.FC<PropTypes> = ({initialValues, setStatus}) => {
@@ -19,15 +19,15 @@ const FormObserver: React.FC<PropTypes> = ({initialValues, setStatus}) => {
     )
 };
 
-type PaymentsType = {
-    title: string,
-    payments: Array<PaymentsType>
-};
+// type PaymentsType = {
+//     title: string,
+//     payments: Array<PaymentsType>
+// };
 
-type ContextTypes = PaymentsType| IncomesType | RegularsType| WhishlistType;
+type ContextTypes = Outcome| IncomesType | RegularsType| WhishlistType;
 
 type PropTypes = {
-    initialValues: OutcomesType | WhishlistType | RegularsType | IncomesType,
+    initialValues: Outcome | WhishlistType | RegularsType | IncomesType,
     setStatus: (status: boolean) => void;
 };
 

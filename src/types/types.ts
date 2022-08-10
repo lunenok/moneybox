@@ -42,3 +42,7 @@ export type RegularsType = {
 };
 
 export type OutcomesKinds = 'Payments' | 'Car' | 'Holidays';
+
+export interface PushCallback {
+    (data: PaymentType): void;
+};

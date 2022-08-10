@@ -3,7 +3,7 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import {Link, Navigate} from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
-const SignIn = observer(({authStore}) => {
+const SignIn: React.FC<PropTypes> = observer(({authStore}) => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
@@ -33,5 +33,9 @@ const SignIn = observer(({authStore}) => {
         </Grid>
     )
 });
+
+type PropTypes = {
+    authStore: any
+};
 
 export default SignIn;
