@@ -4,7 +4,7 @@ import MainScreen from './components/main-screen';
 import {BrowserRouter} from 'react-router-dom';
 import {authStore} from './store/auth';
 
-function App() {
+const App: React.FC = () => {
   // Так можно? Или надо прокинуть store как пропс?
   authStore.checkAuth();
   return (

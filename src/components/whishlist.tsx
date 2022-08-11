@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
-import {showErrorMessageFormik, isErrorFormik} from './../utils.ts';
+import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
 import Loader from './loader';
+import { PushCallback, WhishlistType } from '../types/types';
 
 const schema = Yup.object().shape({
-    save: Yup.number('Must be number').required('Required'),
+    save: Yup.number().required('Required'),
     percent: Yup.string().required('Required'),
     stuff: Yup.array()
         .of(
@@ -23,10 +24,11 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-const Whishlist = observer(({whishlistStore}) => {
+const Whishlist: React.FC<PropTypes> = observer(({whishlistStore}) => {
 
     const [count, setCount] = useState(whishlistStore.whishlist.stuff.length);
     const [isSave, setSaveStatus] = React.useState(true);
+    const initialValues: WhishlistType = whishlistStore.whishlist;
 
     const stateForObserver = {
         percent: whishlistStore.whishlist.percent,
@@ -34,8 +36,8 @@ const Whishlist = observer(({whishlistStore}) => {
         stuff: whishlistStore.whishlist.stuff,  
     };
     
-    const onAdd = (pushCallback) => {
-        const newItem = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
+    const onAdd = (pushCallback: PushCallback) => {
+        const newItem = {id: count + 1, description:'', amount: 0, currency: 'rub', month: 12}
         pushCallback(newItem)
         setCount(count + 1)
     };
@@ -46,21 +48,21 @@ const Whishlist = observer(({whishlistStore}) => {
 
     return (
         <React.Fragment>            
-            <Formik enableReinitialize initialValues={whishlistStore.whishlist} onSubmit={(values) => {
+            <Formik enableReinitialize initialValues={initialValues} onSubmit={(values) => {
                 whishlistStore.save(values)
                 setSaveStatus(true);
                 }} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <FormObserver initialValues={stateForObserver} setStatus={setSaveStatus}/>
-                        <Grid item display>
+                        <Grid item>
                             <Grid container alignItems={'center'} direction={'row'}>
                                 <Typography variant={'h6'} mr={1}>Save</Typography>
                                 <SaveAlert isSave={isSave}/>
                             </Grid>
                         </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'body'} mb={2}>Enter how much you want save every month (rubles)</Typography>
+                            <Typography variant={'body1'} mb={2}>Enter how much you want save every month (rubles)</Typography>
                         </Grid>
 
                         <Grid container>
@@ -75,8 +77,8 @@ const Whishlist = observer(({whishlistStore}) => {
                                         onBlur={handleBlur} 
                                         label='save'
                                         type="number"
-                                        helperText={showErrorMessageFormik(touched, errors, `save`)}
-                                        error={isErrorFormik(touched, errors, `save`)}
+                                        helperText={showErrorMessageFormik(touched as unknown as boolean, errors, `save`)}
+                                        error={isErrorFormik(touched  as unknown as boolean, errors, `save`)}
                                         />
                                     </Grid>
                                      <Grid item>
@@ -87,8 +89,8 @@ const Whishlist = observer(({whishlistStore}) => {
                                             onChange={handleChange} 
                                             onBlur={handleBlur} 
                                             label='percent'
-                                            helperText={showErrorMessageFormik(touched, errors, `percent`)}
-                                            error={isErrorFormik(touched, errors, `percent`)}>
+                                            helperText={showErrorMessageFormik(touched  as unknown as boolean, errors, `percent`)}
+                                            error={isErrorFormik(touched as unknown as boolean, errors, `percent`)}>
                                             <MenuItem value={'yes'}>yes</MenuItem>
                                             <MenuItem value={'no'}>no</MenuItem>
                                         </TextField>
@@ -100,7 +102,7 @@ const Whishlist = observer(({whishlistStore}) => {
 
                         <Grid item mb={2}>
                             <Typography variant={'h6'} mt={3}>Whislist</Typography>
-                            <Typography variant={'body'} mb={2}>Enter your whishes</Typography>
+                            <Typography variant={'body1'} mb={2}>Enter your whishes</Typography>
                         </Grid>
                         <FieldArray name='stuff'>
                             {({insert, remove, push}) => (
@@ -125,8 +127,8 @@ const Whishlist = observer(({whishlistStore}) => {
                                                             value={whish.description} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
-                                                            helperText={showErrorMessageFormik(touched, errors, `stuff.${index}.description`)}
-                                                            error={isErrorFormik(touched, errors, `stuff.${index}.description`)}
+                                                            helperText={showErrorMessageFormik(touched  as unknown as boolean, errors, `stuff.${index}.description`)}
+                                                            error={isErrorFormik(touched  as unknown as boolean, errors, `stuff.${index}.description`)}
                                                             label="name"/>
                                                     </Grid>
                                                     <Grid item xs={1.5}>
@@ -137,8 +139,8 @@ const Whishlist = observer(({whishlistStore}) => {
                                                             onBlur={handleBlur} 
                                                             label="amount"
                                                             type="number"
-                                                            helperText={showErrorMessageFormik(touched, errors, `stuff.${index}.amount`)}
-                                                            error={isErrorFormik(touched, errors, `stuff.${index}.amount`)}
+                                                            helperText={showErrorMessageFormik(touched  as unknown as boolean, errors, `stuff.${index}.amount`)}
+                                                            error={isErrorFormik(touched  as unknown as boolean, errors, `stuff.${index}.amount`)}
                                                             />
                                                     </Grid>
                                                     <Grid item xs={2}>
@@ -191,7 +193,6 @@ const Whishlist = observer(({whishlistStore}) => {
                                         <Grid item xs={1}></Grid>
                                         <Button
                                             type="button"
-                                            margin="normal"
                                             color="primary"
                                             onClick={() => {onAdd(push)}}
                                             variant="outlined">
@@ -211,5 +212,9 @@ const Whishlist = observer(({whishlistStore}) => {
         </React.Fragment>
     )
 });
+
+type PropTypes = {
+    whishlistStore: any
+};
 
 export default Whishlist;
