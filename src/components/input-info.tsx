@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Tab, Tabs } from '@mui/material';
-import { Regulars } from './regulars';
+import Regulars from './regulars';
 import Payments from './payments';
 import Incomes from './incomes';
 import Whishlist from './whishlist';

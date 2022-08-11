@@ -2,11 +2,12 @@ import React from 'react'
 import { Formik, Form, FieldArray } from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
-import {showErrorMessageFormik, isErrorFormik} from '../utils.ts';
+import {showErrorMessageFormik, isErrorFormik} from '../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
 import Loader from './loader';
+import { RegularsType, Sub } from './../types/types'
 
 const schema = Yup.object().shape({
     subs: Yup.array()
@@ -15,19 +16,23 @@ const schema = Yup.object().shape({
                 id: Yup.number().required('Required'),
                 description: Yup.string().required('Required'),
                 amount: Yup.number().required('Required'),
-                currency: Yup.string().required('Required')
+                currency: Yup.string().required('Required'),
             })
         ).required('Required')
 })
 
-export const Regulars = observer(({subsStore}) => {
+const Regulars: React.FC<PropTypes> = observer(({subsStore}) => {
 
-    const initialValues = subsStore
+    const initialValues: RegularsType = subsStore;
     const [count, setCount] = React.useState(subsStore.subs.length);
     const [isSave, setSaveStatus] = React.useState(true);
 
-    const onAdd = (pushCallback) => {
-        const newSub = {id: count + 1, description:'', amount: '', currency: 'rub'}
+    type PushCallback = {
+        (data: Sub): void
+    };
+
+    const onAdd = (pushCallback: PushCallback) => {
+        const newSub = {id: count + 1, description:'', amount: 0, currency: 'rub'}
         pushCallback(newSub)
         setCount(count + 1)
     };
@@ -38,33 +43,33 @@ export const Regulars = observer(({subsStore}) => {
     
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues.subs} onSubmit={(values)=> {  
-                subsStore.save(values);
+            <Formik initialValues={initialValues} onSubmit={(values)=> {  
+                subsStore.save(values.subs);
                 setSaveStatus(true);
                 }} 
                 validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur, isSubmitting}) => (
                     <Form>
-                        <FormObserver initialValues={initialValues.subs} setStatus={setSaveStatus}/>
-                        <Grid item mb={2} display>
+                        <FormObserver initialValues={initialValues} setStatus={setSaveStatus}/>
+                        <Grid item mb={2}>
                             <Grid container alignItems={'center'} direction={'row'}>
                                 <Typography variant={'h6'} mr={1}>Regular</Typography>
                                 <SaveAlert isSave={isSave}/>
                             </Grid>
-                            <Typography variant={'body'} mb={2}>Enter your regular outcomes, for example rental and subscriptions</Typography>
+                            <Typography variant={'body1'} mb={2}>Enter your regular outcomes, for example rental and subscriptions</Typography>
                         </Grid>
                         <FieldArray name='subs'>
                             {({insert, remove, push}) => (
                                 <div>
-                                    {values.length ?  
-                                        values.map((sub, index) => {
+                                    {values.subs.length ?  
+                                        values.subs.map((sub, index) => {
                                             return (
                                                 <div className='row' key={index}>
                                                     <Grid container spacing={1} mb={2} justifyContent={'start'}>
                                                         <Grid item xs={1}></Grid>
                                                         <Grid item xs={0.5}>
                                                             <TextField 
-                                                                name={`${index}.id`}
+                                                                name={`subs.${index}.id`}
                                                                 value={sub.id} 
                                                                 onChange={handleChange}
                                                                 onBlur={handleBlur} 
@@ -73,19 +78,19 @@ export const Regulars = observer(({subsStore}) => {
                                                         </Grid>
                                                         <Grid item>
                                                             <TextField 
-                                                                name={`${index}.description`} 
+                                                                name={`subs.${index}.description`} 
                                                                 value={sub.description} 
                                                                 onChange={(e) => {
                                                                     handleChange(e);
                                                                 }} 
                                                                 onBlur={handleBlur} 
-                                                                helperText={showErrorMessageFormik(touched, errors, `${index}.description`)}
-                                                                error={isErrorFormik(touched, errors, `${index}.description`)}
+                                                                helperText={showErrorMessageFormik(touched as boolean, errors, `subs.${index}.description`)}
+                                                                error={isErrorFormik(touched as boolean, errors, `subs.${index}.description`)}
                                                                 label="name"/>
                                                         </Grid>
                                                         <Grid item xs={1.5}>
                                                             <TextField 
-                                                                name={`${index}.amount`} 
+                                                                name={`subs.${index}.amount`} 
                                                                 value={sub.amount}
                                                                 onChange={(e) => {
                                                                     handleChange(e);
@@ -93,14 +98,14 @@ export const Regulars = observer(({subsStore}) => {
                                                                 onBlur={handleBlur} 
                                                                 label="amount"
                                                                 type="number"
-                                                                helperText={showErrorMessageFormik(touched, errors, `${index}.amount`)}
-                                                                error={isErrorFormik(touched, errors, `${index}.amount`)}
+                                                                helperText={showErrorMessageFormik(touched as boolean, errors, `subs.${index}.amount`)}
+                                                                error={isErrorFormik(touched as boolean, errors, `subs.${index}.amount`)}
                                                                 />
                                                         </Grid>
                                                         <Grid item>
                                                             <TextField 
                                                                 select
-                                                                name={`${index}.currency`} 
+                                                                name={`subs.${index}.currency`} 
                                                                 value={sub.currency} 
                                                                 onChange={(e) => {
                                                                     handleChange(e);
@@ -131,7 +136,6 @@ export const Regulars = observer(({subsStore}) => {
                                         <Grid item xs={1}></Grid>
                                         <Button
                                             type="button"
-                                            margin="normal"
                                             color="primary"
                                             onClick={() => {
                                                 onAdd(push);
@@ -154,3 +158,9 @@ export const Regulars = observer(({subsStore}) => {
         </React.Fragment>
     )
 });
+
+type PropTypes = {
+    subsStore: any
+}
+
+export default Regulars;

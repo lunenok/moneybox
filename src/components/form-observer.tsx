@@ -8,23 +8,21 @@ const FormObserver: React.FC<PropTypes> = ({initialValues, setStatus}) => {
     useEffect(() => {
         const curr =  JSON.stringify(values)
         const init = JSON.stringify(initialValues);
+        // console.log('init', init);
+        // console.log('curr', curr);
         if (init === curr) {
             setStatus(true);
         } else {
             setStatus(false);
         }
     }, [values]);
+
     return (
         <div></div>
     )
 };
 
-// type PaymentsType = {
-//     title: string,
-//     payments: Array<PaymentsType>
-// };
-
-type ContextTypes = Outcome| IncomesType | RegularsType| WhishlistType;
+type ContextTypes = Outcome| IncomesType | RegularsType | WhishlistType;
 
 type PropTypes = {
     initialValues: Outcome | WhishlistType | RegularsType | IncomesType,

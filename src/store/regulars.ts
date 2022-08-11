@@ -1,14 +1,14 @@
 import { makeAutoObservable } from 'mobx';
 import { writeRegular } from '../api';
-import { PaymentType } from '../types/types';
+import { Sub } from '../types/types';
 
 export const subsStore = makeAutoObservable({
-    subs: [] as Array<PaymentType>,
+    subs: [] as Array<Sub>,
     isLoading: true,
 
-    save: (subs: Array<PaymentType>) => {
-        subsStore.subs = subs;
+    save: (subs: Array<Sub>) => {
         writeRegular(subs);
+        subsStore.subs = subs;
         subsStore.isLoading = false;
     },
 

@@ -37,8 +37,15 @@ export type OutcomesType = {
     outcomes: Array<Outcome>
 };
 
+export type Sub = {
+    id: number, 
+    description: string, 
+    amount: number, 
+    currency: string
+};
+
 export type RegularsType = {
-    regulars: Array<PaymentType>
+    subs: Array<Sub>
 };
 
 export type OutcomesKinds = 'Payments' | 'Car' | 'Holidays';

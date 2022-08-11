@@ -3,12 +3,12 @@ import { ref, set, get, child } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { initialValue as incomesInitialValue }  from './store/income';
 import { whishlistInitialValues } from './store/whislist';
-import { PaymentType, Incomes, WhishlistType, OutcomesKinds } from './types/types';
+import { PaymentType, Incomes, WhishlistType, OutcomesKinds, Sub } from './types/types';
 
 const auth = getAuth(app);
 const db = database;
 
-export const writeRegular = (data: Array<PaymentType>) => {
+export const writeRegular = (data: Array<Sub>) => {
     const userUid = auth.currentUser?.uid;
     set(ref(db, 'regulars/' + userUid), {
         regulars: data,
