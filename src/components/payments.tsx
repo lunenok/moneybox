@@ -6,6 +6,8 @@ import {showErrorMessageFormik, isErrorFormik} from './../utils';
 import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
+import { OutcomesTypesValues } from '../store/outcomes';
+import { Outcome, PushCallback } from '../types/types';
 
 const schema = Yup.object().shape({
     payments: Yup.array()
@@ -20,13 +22,13 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-const Payments = observer(({outcomesStore, type}) => {
+const Payments: React.FC<PropTypes> = observer(({outcomesStore, type}) => {
 
     const [count, setCount] = React.useState(outcomesStore.outcomes[type] ? outcomesStore.outcomes[type].payments.length : 0);
     const [isSave, setSaveStatus] = React.useState(true);
-    const initialValues = outcomesStore.outcomes[type];
+    const initialValues: Outcome = outcomesStore.outcomes[type];
 
-    const onAdd = (pushCallback) => {
+    const onAdd = (pushCallback: PushCallback) => {
         const newSub = {id: count + 1, description: 'new', amount: 0, currency: 'rub', month: 12}
         pushCallback(newSub)
         setCount(count + 1)
@@ -36,6 +38,10 @@ const Payments = observer(({outcomesStore, type}) => {
         return <div></div>
     };
     
+    const initialValuesForObserver: Outcome = {
+        title: outcomesStore.outcomes[type].title,
+        payments: initialValues.payments
+    }
 
     return (
         <React.Fragment>
@@ -48,15 +54,15 @@ const Payments = observer(({outcomesStore, type}) => {
             validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
-                        <FormObserver initialValues={initialValues.payments} name={'payments'} setStatus={setSaveStatus}/>
-                        <Grid item display>
+                        <FormObserver initialValues={initialValuesForObserver} setStatus={setSaveStatus}/>
+                        <Grid item>
                             <Grid container alignItems={'center'} direction={'row'}>
                                 <Typography variant={'h6'} mr={1}>{outcomesStore.outcomes.length ? outcomesStore.outcomes[type].title : 'Create category'}</Typography>
                                 <SaveAlert isSave={isSave}/>
                             </Grid>
                         </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'body'} mb={3}>Enter your non-regular outcomes</Typography>
+                            <Typography variant={'body1'} mb={3}>Enter your non-regular outcomes</Typography>
                         </Grid>
                         <FieldArray name='payments'>
                             {({insert, remove, push}) => (
@@ -82,8 +88,8 @@ const Payments = observer(({outcomesStore, type}) => {
                                                                 value={payment.description} 
                                                                 onChange={handleChange}
                                                                 onBlur={handleBlur} 
-                                                                helperText={showErrorMessageFormik(touched, errors, `payments.${index}.description`)}
-                                                                error={isErrorFormik(touched, errors, `payments.${index}.description`)}
+                                                                helperText={showErrorMessageFormik(touched as boolean, errors, `payments.${index}.description`)}
+                                                                error={isErrorFormik(touched as boolean, errors, `payments.${index}.description`)}
                                                                 label="name"/>
                                                         </Grid>
                                                         <Grid item xs={1.5}>
@@ -93,8 +99,9 @@ const Payments = observer(({outcomesStore, type}) => {
                                                                 onChange={handleChange}
                                                                 onBlur={handleBlur} 
                                                                 label="amount"
-                                                                helperText={showErrorMessageFormik(touched, errors, `payments.${index}.amount`)}
-                                                                error={isErrorFormik(touched, errors, `payments.${index}.amount`)}
+                                                                type="number"
+                                                                helperText={showErrorMessageFormik(touched as boolean, errors, `payments.${index}.amount`)}
+                                                                error={isErrorFormik(touched as boolean, errors, `payments.${index}.amount`)}
                                                                 />
                                                         </Grid>
                                                         <Grid item xs={2}>
@@ -149,7 +156,6 @@ const Payments = observer(({outcomesStore, type}) => {
                                         <Grid item xs={1}></Grid>
                                         <Button
                                             type="button"
-                                            margin="normal"
                                             color="primary"
                                             onClick={() => {
                                                 onAdd(push)
@@ -171,5 +177,10 @@ const Payments = observer(({outcomesStore, type}) => {
         </React.Fragment>
     )
 });
+
+type PropTypes = {
+    outcomesStore: any,
+    type: OutcomesTypesValues
+};
 
 export default Payments;

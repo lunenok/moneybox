@@ -3,11 +3,11 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import { Navigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
-const SignUp = observer(({authStore}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordCheck, setPassowrdCheck] = useState('');
-    const [errorMessage, setErrorMessage] = useState(null);
+const SignUp: React.FC<PropTypes> = observer(({authStore}) => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [passwordCheck, setPassowrdCheck] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     if (authStore.isAuth) return <Navigate to='/payments'></Navigate>
 
@@ -27,7 +27,7 @@ const SignUp = observer(({authStore}) => {
                     </TextField>
                 </Grid>
                 <Grid item textAlign={'center'}>
-                    <TextField name='password_check' label='Repeat password' mb={2} type='password' value={passwordCheck} 
+                    <TextField name='password_check' label='Repeat password' type='password' value={passwordCheck} 
                         onChange={(e) => {
                             setPassowrdCheck(e.target.value)
                         }}>
@@ -38,7 +38,7 @@ const SignUp = observer(({authStore}) => {
                     <Button name='register' variant="outlined" onClick={() => {
                         if (password === passwordCheck) {
                             authStore.register(email, password);
-                            setErrorMessage(null);
+                            setErrorMessage('');
                         } else {
                             setErrorMessage('Password do not match')
                         }
@@ -47,5 +47,9 @@ const SignUp = observer(({authStore}) => {
         </Grid>
     )
 });
+
+type PropTypes = {
+    authStore: any
+};
 
 export default SignUp;

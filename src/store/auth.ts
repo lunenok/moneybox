@@ -1,6 +1,6 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import {app} from './../firebase';
+import {app} from '../firebase';
 import { subsStore } from './regulars';
 import { outcomesStore } from './outcomes';
 import { incomesStore } from './income';
@@ -9,10 +9,10 @@ import { whishlistStore } from './whislist';
 const auth = getAuth(app);
 
 export const authStore = makeAutoObservable({
-    account: '',
+    account: {},
     isAuth: false,
 
-    register: (email, password) => {
+    register: (email: string, password: string) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
               const user = userCredential.user;
@@ -22,13 +22,13 @@ export const authStore = makeAutoObservable({
             });
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert(errorCode, errorMessage)
+            const errorCode : number = error.code;
+            const errorMessage : string = error.message;
+            alert(errorCode + errorMessage)
         });
     },
 
-    login: (email, password) => {
+    login: (email: string, password: string) => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
             const user = userCredential.user;
@@ -40,7 +40,7 @@ export const authStore = makeAutoObservable({
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert(errorCode, errorMessage)
+            alert(errorCode + errorMessage)
         });
     },
 
@@ -74,4 +74,4 @@ export const authStore = makeAutoObservable({
     },
 });
 
-window.auth = authStore;
+export type AuthStore = typeof authStore;

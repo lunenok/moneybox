@@ -7,18 +7,17 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import QuickSum from './quick-sum';
-import { outcomesStore } from './../store/outcomes';
-import { subsStore } from './../store/regulars';
+import { outcomesStore } from '../store/outcomes';
+import { subsStore } from '../store/regulars';
 import { incomesStore } from '../store/income';
-import { whishlistStore } from './../store/whislist';
+import { whishlistStore } from '../store/whislist';
 import { authStore } from '../store/auth';
+import { getPayments, getIncomes, getRegular, getWhishes } from '../api';
 
-import { getPayments, getIncomes, getRegular, getWhishes } from './../api';
-
-const Header = observer(({store}) => {
+const Header: React.FC<PropTypes> = observer(({outcomesStore, subsStore, incomesStore, whishlistStore, authStore}) => {
 
     React.useEffect(() => {
-        if (store.isAuth) {
+        if (authStore.isAuth) {
             getPayments(outcomesStore.save, 'Payments');
             getPayments(outcomesStore.save, 'Car');
             getPayments(outcomesStore.save, 'Holidays');
@@ -26,7 +25,7 @@ const Header = observer(({store}) => {
             getIncomes(incomesStore.save);
             getWhishes(whishlistStore.save);
         };
-    }, [store.isAuth]);
+    }, [authStore.isAuth]);
 
     return (
         <AppBar sx={{position: 'sticky'}}>
@@ -42,9 +41,9 @@ const Header = observer(({store}) => {
                     <Link to='/calculation' style={{ textDecoration: 'none' }}>
                         <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }}><FunctionsSharpIcon/>Calculation</Button>
                     </Link>
-                    {store.account.email ? 
-                       <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }} onClick={() => {store.signOut()}}>
-                           <AccountCircleIcon/>Log out of {store.account.profile}
+                    {authStore.account.email ? 
+                       <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }} onClick={() => {authStore.signOut()}}>
+                           <AccountCircleIcon/>Log out of {authStore.account.profile}
                        </Button> :
                        <Link to='/login' style={{ textDecoration: 'none' }}>
                            <Button sx={{ my: 2, color: 'white', display: 'flex', ml: 4 }}><AccountCircleIcon/>Sign in
@@ -52,7 +51,7 @@ const Header = observer(({store}) => {
                        </Link> 
                     }
 
-                    <span>{store.account.email}</span>
+                    <span>{authStore.account.email}</span>
                 </Toolbar>
                 <Container>
                     <Grid container mb={2}>
@@ -68,6 +67,18 @@ const Header = observer(({store}) => {
             </Container>    
         </AppBar>
     )
-})
+});
 
-export default Header;
+const withStore = () => {
+    return <Header outcomesStore={outcomesStore} subsStore={subsStore} incomesStore={incomesStore} whishlistStore={whishlistStore} authStore={authStore}/>
+};
+
+type PropTypes = {
+    outcomesStore: any,
+    subsStore: any,
+    incomesStore: any,
+    whishlistStore: any,
+    authStore: any
+};
+
+export default withStore;

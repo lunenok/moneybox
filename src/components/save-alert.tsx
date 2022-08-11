@@ -1,16 +1,23 @@
 import React from 'react';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-const SaveAlert = ({isSave}) => {
+const SaveAlert: React.FC<PropTypes> = ({isSave}) => {
     if (!isSave) {
         return (
             <React.Fragment>
-                <ReportGmailerrorredIcon mr={1} color={'error'} ></ReportGmailerrorredIcon>
+                <ReportGmailerrorredIcon color={'error'} ></ReportGmailerrorredIcon>
                 <Typography color={'error'}>Data are not saved</Typography>
             </React.Fragment>
         )
     };
+    return (
+        <div></div>
+    )
+};
+
+type PropTypes = {
+    isSave: boolean
 };
 
 export default SaveAlert;

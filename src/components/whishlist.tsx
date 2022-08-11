@@ -1,5 +1,5 @@
-import React from 'react'
-import { Formik, Form, FieldArray } from 'formik';
+import React, { useState } from 'react';
+import { Formik, Form, FieldArray} from 'formik';
 import * as Yup from 'yup'
 import { TextField, Button, Grid, MenuItem, Typography } from '@mui/material';
 import {showErrorMessageFormik, isErrorFormik} from './../utils';
@@ -7,11 +7,12 @@ import { observer } from 'mobx-react-lite';
 import SaveAlert from './save-alert';
 import FormObserver from './form-observer';
 import Loader from './loader';
+import { PushCallback, WhishlistType } from '../types/types';
 
 const schema = Yup.object().shape({
-    balance: Yup.number().required('Required'),
-    salary: Yup.number().required('Required'),
-    anotherIncomes: Yup.array()
+    save: Yup.number().required('Required'),
+    percent: Yup.string().required('Required'),
+    stuff: Yup.array()
         .of(
             Yup.object().shape({
                 id: Yup.number().required('Required'),
@@ -23,90 +24,98 @@ const schema = Yup.object().shape({
         ).required('Required')  
 })
 
-const Incomes = observer(({incomesStore}) => {
-    
-    // Это сделано, чтобы в форму не прокидывать isLoading, потому что так некорректно работает сверка initialState и currState (через useContext).
-    const initialValues = {balance: incomesStore.balance, salary: incomesStore.salary, anotherIncomes: incomesStore.anotherIncomes};
-    const [count, setCount] = React.useState(incomesStore.anotherIncomes.length);
+const Whishlist: React.FC<PropTypes> = observer(({whishlistStore}) => {
+
+    const [count, setCount] = useState(whishlistStore.whishlist.stuff.length);
     const [isSave, setSaveStatus] = React.useState(true);
+    const initialValues: WhishlistType = whishlistStore.whishlist;
 
     const stateForObserver = {
-        balance: initialValues.balance,
-        salary: initialValues.salary,
-        anotherIncomes: incomesStore.anotherIncomes
+        percent: whishlistStore.whishlist.percent,
+        save: whishlistStore.whishlist.save,
+        stuff: whishlistStore.whishlist.stuff,  
     };
     
-    const onAdd = (pushCallback) => {
-        const newIncome = {id: count + 1, description:'', amount: '', currency: 'rub', month: 12}
-        pushCallback(newIncome)
+    const onAdd = (pushCallback: PushCallback) => {
+        const newItem = {id: count + 1, description:'', amount: 0, currency: 'rub', month: 12}
+        pushCallback(newItem)
         setCount(count + 1)
     };
 
-    if (incomesStore.isLoading) {
+    if (whishlistStore.isLoading) {
         return <Loader/>
     };
-    
+
     return (
         <React.Fragment>            
-            <Formik initialValues={initialValues} onSubmit={(values) => {
-                incomesStore.save(values);
+            <Formik enableReinitialize initialValues={initialValues} onSubmit={(values) => {
+                whishlistStore.save(values)
                 setSaveStatus(true);
                 }} validationSchema={schema}> 
                 {({values, touched, errors, handleChange, handleBlur}) => (
                     <Form>
                         <FormObserver initialValues={stateForObserver} setStatus={setSaveStatus}/>
-                        <Grid item display>
+                        <Grid item>
                             <Grid container alignItems={'center'} direction={'row'}>
-                                <Typography variant={'h6'} mr={1}>Balance and Salary</Typography>
+                                <Typography variant={'h6'} mr={1}>Save</Typography>
                                 <SaveAlert isSave={isSave}/>
                             </Grid>
                         </Grid>
                         <Grid item mb={2}>
-                            <Typography variant={'body'} mb={2}>Enter your starting balance and month salary (rubles)</Typography>
+                            <Typography variant={'body1'} mb={2}>Enter how much you want save every month (rubles)</Typography>
                         </Grid>
+
                         <Grid container>
                             <Grid item xs={1}></Grid>
-                            <Grid mb={2}>
-                                <Grid item mb={2}>
-                                    <TextField
-                                    name={`balance`}
-                                    value={values.balance}
-                                    onChange={handleChange} 
-                                    onBlur={handleBlur} 
-                                    label='balance'
-                                    helperText={showErrorMessageFormik(touched, errors, `balance`)}
-                                    error={isErrorFormik(touched, errors, `balance`)}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                    name={`salary`}
-                                    value={values.salary}
-                                    onChange={handleChange} 
-                                    onBlur={handleBlur} 
-                                    label='salary'
-                                    helperText={showErrorMessageFormik(touched, errors, `salary`)}
-                                    error={isErrorFormik(touched, errors, `salary`)}
-                                    />
+                            <Grid>
+                                <Grid container spacing={1} item mb={2}>
+                                    <Grid item>
+                                        <TextField
+                                        name={`save`}
+                                        value={values.save}
+                                        onChange={handleChange} 
+                                        onBlur={handleBlur} 
+                                        label='save'
+                                        type="number"
+                                        helperText={showErrorMessageFormik(touched as unknown as boolean, errors, `save`)}
+                                        error={isErrorFormik(touched  as unknown as boolean, errors, `save`)}
+                                        />
+                                    </Grid>
+                                     <Grid item>
+                                         <TextField
+                                            select
+                                            name={`percent`}
+                                            value={values.percent}
+                                            onChange={handleChange} 
+                                            onBlur={handleBlur} 
+                                            label='percent'
+                                            helperText={showErrorMessageFormik(touched  as unknown as boolean, errors, `percent`)}
+                                            error={isErrorFormik(touched as unknown as boolean, errors, `percent`)}>
+                                            <MenuItem value={'yes'}>yes</MenuItem>
+                                            <MenuItem value={'no'}>no</MenuItem>
+                                        </TextField>
+                                     </Grid>
+
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <Typography variant={'h6'}>Another income</Typography>
-                            <Typography variant={'body'}>Here you can enter another expected incomes</Typography>
+
+                        <Grid item mb={2}>
+                            <Typography variant={'h6'} mt={3}>Whislist</Typography>
+                            <Typography variant={'body1'} mb={2}>Enter your whishes</Typography>
                         </Grid>
-                        <FieldArray name='anotherIncomes'>
+                        <FieldArray name='stuff'>
                             {({insert, remove, push}) => (
                                 <div>
-                                    {values.anotherIncomes.map((income, index) => {
+                                    {values.stuff.map((whish, index) => {
                                         return (
                                             <div className='row' key={index}>
-                                                <Grid container spacing={1} mb={2} mt={2} justifyContent={'start'}>
+                                                <Grid container spacing={1} mb={2} justifyContent={'start'}>
                                                     <Grid item xs={1}></Grid>
                                                     <Grid item xs={0.5}>
                                                         <TextField 
-                                                            name={`anotherIncomes.${index}.id`}
-                                                            value={income.id} 
+                                                            name={`stuff.${index}.id`}
+                                                            value={whish.id} 
                                                             onChange={handleChange} 
                                                             onBlur={handleBlur} 
                                                             label="#"
@@ -114,35 +123,36 @@ const Incomes = observer(({incomesStore}) => {
                                                     </Grid>
                                                     <Grid item>
                                                         <TextField 
-                                                            name={`anotherIncomes.${index}.description`} 
-                                                            value={income.description} 
+                                                            name={`stuff.${index}.description`} 
+                                                            value={whish.description} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
-                                                            helperText={showErrorMessageFormik(touched, errors, `anotherIncomes[${index}].description`)}
-                                                            error={isErrorFormik(touched, errors, `anotherIncomes[${index}].description`)}
+                                                            helperText={showErrorMessageFormik(touched  as unknown as boolean, errors, `stuff.${index}.description`)}
+                                                            error={isErrorFormik(touched  as unknown as boolean, errors, `stuff.${index}.description`)}
                                                             label="name"/>
                                                     </Grid>
                                                     <Grid item xs={1.5}>
                                                         <TextField 
-                                                            name={`anotherIncomes.${index}.amount`} 
-                                                            value={income.amount} 
+                                                            name={`stuff.${index}.amount`} 
+                                                            value={whish.amount} 
                                                             onChange={handleChange}
                                                             onBlur={handleBlur} 
                                                             label="amount"
-                                                            helperText={showErrorMessageFormik(touched, errors, `anotherIncomes[${index}].amount`)}
-                                                            error={isErrorFormik(touched, errors, `anotherIncomes[${index}].amount`)}
+                                                            type="number"
+                                                            helperText={showErrorMessageFormik(touched  as unknown as boolean, errors, `stuff.${index}.amount`)}
+                                                            error={isErrorFormik(touched  as unknown as boolean, errors, `stuff.${index}.amount`)}
                                                             />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <TextField 
                                                             select
                                                             fullWidth
-                                                            name={`anotherIncomes.${index}.month`} 
-                                                            value={income.month} 
+                                                            name={`stuff.${index}.month`} 
+                                                            value={whish.month} 
                                                             onChange={handleChange}
                                                             label="month">
-                                                                <MenuItem value={1}>january</MenuItem>
                                                                 <MenuItem value={2}>febrary</MenuItem>
+                                                                <MenuItem value={1}>january</MenuItem>
                                                                 <MenuItem value={3}>march</MenuItem>
                                                                 <MenuItem value={4}>april</MenuItem>
                                                                 <MenuItem value={5}>may</MenuItem>
@@ -158,8 +168,8 @@ const Incomes = observer(({incomesStore}) => {
                                                     <Grid item>
                                                         <TextField 
                                                             select
-                                                            name={`anotherIncomes.${index}.currency`} 
-                                                            value={income.currency} 
+                                                            name={`stuff.${index}.stuff.currency`} 
+                                                            value={whish.currency} 
                                                             onChange={handleChange}
                                                             label="currency">
                                                                 <MenuItem value={'rub'}>rub</MenuItem>
@@ -179,15 +189,14 @@ const Incomes = observer(({incomesStore}) => {
                                                 </Grid>
                                             </div>
                                         )})}
-                                    <Grid container mt={2} justifyContent={'start'}>
-                                        <Grid item xs={1} ></Grid>
+                                    <Grid container justifyContent={'start'}>
+                                        <Grid item xs={1}></Grid>
                                         <Button
                                             type="button"
-                                            margin="normal"
                                             color="primary"
                                             onClick={() => {onAdd(push)}}
                                             variant="outlined">
-                                            + Add income
+                                            + Add whish
                                         </Button>
                                     </Grid>
                                 </div>
@@ -204,4 +213,8 @@ const Incomes = observer(({incomesStore}) => {
     )
 });
 
-export default Incomes;
+type PropTypes = {
+    whishlistStore: any
+};
+
+export default Whishlist;

@@ -4,17 +4,15 @@ import { Container, Grid } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { getSaveAmount } from './../utils';
-import { getPayments } from './../api';
-import Loader from './loader';
 
-const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistStore, authStore}) => {
+const QuickSum: React.FC<PropTypes> = observer(({outcomesStore, incomesStore, subsStore, whishlistStore, authStore}) => {
     const outcomes = outcomesStore.getTotal() + subsStore.getTotal();
     const incomesTotal = incomesStore.getTotal();
     const incomesArray = incomesStore.getByMonth();
     const save = getSaveAmount(incomesArray, whishlistStore.whishlist.save, whishlistStore.whishlist.percent);
     const balance = incomesTotal - outcomes - save;
 
-    const isPositive = (balance) => {
+    const isPositive = (balance: number) => {
         if (balance < 0) {
             return <ErrorOutlineIcon style={{color: '#f44336'}}></ErrorOutlineIcon>
         }
@@ -51,5 +49,13 @@ const QuickSum = observer(({outcomesStore, incomesStore, subsStore, whishlistSto
 
     );
 });
+
+type PropTypes = {
+    outcomesStore: any, 
+    incomesStore: any, 
+    subsStore: any, 
+    whishlistStore: any, 
+    authStore: any
+}
 
 export default QuickSum;
