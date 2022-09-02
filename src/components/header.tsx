@@ -33,7 +33,7 @@ const Header: React.FC<PropTypes> = observer(({outcomesStore, subsStore, incomes
                 <Toolbar>
                     <DiamondSharpIcon fontSize={'large'}/>
                     <Typography variant='h6' component='span'sx={{mr: 'auto'}}>
-                        PLAN BEST YEAR
+                        MONEYBOX
                     </Typography>
                     <Link to='/incomes' style={{ textDecoration: 'none' }}>
                         <Button sx={{ my: 2, color: 'white', display: 'flex' }}><AttachMoneySharpIcon/>Enter data</Button>
